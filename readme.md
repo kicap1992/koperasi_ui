@@ -1,5 +1,5 @@
 ###################
-Project Koperas
+Project Koperasi
 ###################
 
 This is a project for Koperasi In Enrekang Districts.
@@ -14,5 +14,5 @@ License
 *******
 Created By Kicap Karan
 Facebook https://www.facebook.com/kicap.karan
-Website https://kicap.karan.com
+Website https://kicap-karan.com
 
