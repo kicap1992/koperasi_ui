@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Aplikasi Koperasi Guru Kabupaten Enrekang - Halaman Simpanan Wajib</title>
+
+  <!-- Main Styles -->
+  <link rel="stylesheet" href="../assets/styles/style.min.css">
+
+  <!-- mCustomScrollbar -->
+  <link rel="stylesheet" href="../assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
+
+  <!-- Waves Effect -->
+  <link rel="stylesheet" href="../assets/plugin/waves/waves.min.css">
+
+  <link rel="stylesheet" href="../assets/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+ 
+  <link rel="stylesheet" href="../assets/fonts/fontello/fontello.css">
+  <!-- Dark Themes -->
+  <!-- <link rel="stylesheet" href="../assets/styles/style-dark.min.css"> -->
+  <link rel="stylesheet" href="../assets/plugin/datatables/media/css/dataTables.bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="../assets/plugin/datatables/extensions/Responsive/css/responsive.bootstrap.min.css"> -->
+  <link rel="stylesheet" href="../assets/fonts/material-design/css/materialdesignicons.css">
+  <link rel="stylesheet" href="../assets/sweet-alert/sweetalert.css">
+  <style type="text/css">
+    .swal-modal .swal-text {
+      text-align: center;
+    }
+  </style>
+
+</head>
+
+<body>
+<div class="main-menu">
+  <header class="header">
+    <a href="index.html" class="logo">Koperasi Guru</a>
+    <button type="button" class="button-close fa fa-times js__menu_close"></button>
+    <div class="user">
+      <a href="#" class="avatar"><img src="http://placehold.it/80x80" alt=""><span class="status online"></span></a>
+      <h5 class="name"></h5>
+      <h5 class="position"></h5>
+      <!-- /.name -->
+     
+    </div>
+    <!-- /.user -->
+  </header>
+  <!-- /.header -->
+  <div class="content">
+
+    <div class="navigation">
+      <h5 class="title">Navigasi</h5>
+      <!-- /.title -->
+      <ul class="menu js__accordion">
+        <li>
+          <a class="waves-effect" href="index.html"><i class="menu-icon fa fa-home"></i><span>Halaman Utama</span></a>
+        </li>
+        <li  class="active current">
+          <a class="waves-effect parent-item js__control" href="#"><i class="menu-icon mdi mdi-cube-outline"></i><span>Halaman Simpanan</span><span class="menu-arrow fa fa-angle-down"></span></a>
+          <ul class="sub-menu js__content">
+            <li><a href="simpanan_pokok.html">Simpanan Pokok</a></li>
+            <li class="current"><a href="simpanan_wajib.html">Simpanan Wajib</a></li>
+            <li><a href="simpanan_sukarela.html">Simpanan Sukarela</a></li>
+            <li><a href="pinjaman.html">Pinjaman</a></li>
+          </ul>
+          <!-- /.sub-menu js__content -->
+        </li>
+        <li>
+          <a class="waves-effect" href="list_barang.html"><i class="menu-icon zmdi zmdi-storage"></i><span>List Barang</span></a>
+        </li>
+        
+      </ul>
+      <!-- /.menu js__accordion -->
+      <h5 class="title">Komponen Lain</h5>
+      <!-- /.title -->
+      <ul class="menu js__accordion">
+       
+        <li>
+          <a class="waves-effect" onclick="logout()"><i class="menu-icon icon icon-logout"></i><span>Logout</span></a>
+        </li>
+      
+      </ul>
+     
+    </div>
+    <!-- /.navigation -->
+  </div>
+  <!-- /.content -->
+</div>
+<!-- /.main-menu -->
+
+<div class="fixed-navbar">
+  <div class="pull-left">
+    <button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+    <h1 class="page-title">Simpanan Wajib</h1>
+    <!-- /.page-title -->
+  </div>
+  
+</div>
+<!-- /.fixed-navbar -->
+
+
+<div id="wrapper">
+  <div class="main-content">
+    <div class="row small-spacing">
+      <div class="col-lg-6 col-xs-12">
+        <div class="box-content card">
+          <h4 class="box-title" style="background: #0055FF">Info Simpanan Wajib</h4>
+          <!-- /.box-title -->
+          <div class="card-content">
+            <form>
+              <div class="form-group">
+                <label for="exampleInputEmail1">NIK Guru</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" value="1234567890123456" disabled="">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Nama Guru</label>
+                <input type="text" class="form-control" id="exampleInputPassword1" value="Guru 1" disabled="">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Simpanan Wajib</label>
+                <select class="form-control" id="simpanan_pokok" disabled="">
+                  <option disabled=""  value="">-Pilih Simpanan Pokok</option>
+                  <option value="500000">Rp. 500,000</option>
+                  <option value="1000000" selected="">Rp. 1,000,000</option>
+                  <option value="1500000">Rp. 1,500,000</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Tanggal Terakhir Simpan</label>
+                <input type="text" class="form-control" id="exampleInputPassword1" value="27-05-2020" disabled="">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Total Simpanan Wajib</label>
+                <input type="text" class="form-control" id="exampleInputPassword1" value="Rp. 15,000,000" disabled="">
+              </div>
+            </form>
+          </div>
+          <!-- /.card-content -->
+        </div>
+        <!-- /.box-content -->
+      </div>
+      <!-- /.col-lg-6 col-xs-12 -->
+
+      <div class="col-lg-6 col-xs-12">
+        <div class="box-content card">
+          <h4 class="box-title" style="background: #0055FF">Log Simpanan Wajib</h4>
+          <!-- /.box-title -->
+          <div class="card-content" style="overflow-x: auto;">
+            <table id="table_list_guru" class="table table-striped table-bordered display" style="width:100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Tanggal Simpanan Wajib</th>
+                  <th>Jumlah(<i>Rp. </i>)</th>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>30-08-2001</td>
+                  <td>Rp. 1,500,000</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>30-08-2001</td>
+                  <td>Rp. 1,500,000</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            <hr>
+            <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Cetak Laporan</button></center>
+          </div>
+          <!-- /.card-content -->
+        </div>
+        <!-- /.box-content -->
+      </div>
+
+      
+    </div>
+    <footer class="footer">
+      <ul class="list-inline">
+        <li>2021 © Dinas Pendidikan Kabupaten Enrekang.</li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Help</a></li>
+      </ul>
+    </footer>
+  </div>
+  <!-- /.main-content -->
+</div><!--/#wrapper -->
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="../../assets/script/html5shiv.min.js"></script>
+    <script src="../../assets/script/respond.min.js"></script>
+  <![endif]-->
+  <!-- 
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="../assets/scripts/jquery.min.js"></script>
+  <script src="../assets/scripts/modernizr.min.js"></script>
+  <script src="../assets/plugin/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+  <script src="../assets/plugin/nprogress/nprogress.js"></script>
+  <script src="../assets/plugin/sweet-alert/sweetalert.min.js"></script>
+  <script src="../assets/plugin/waves/waves.min.js"></script>
+  <!-- Full Screen Plugin -->
+  <script src="../assets/plugin/fullscreen/jquery.fullscreen-min.js"></script>
+
+  <script src="../assets/plugin/datatables/media/js/jquery.dataTables.min.js"></script>
+  <script src="../assets/plugin/datatables/media/js/dataTables.bootstrap.min.js"></script>
+  <script src="../assets/scripts/main.min.js"></script>
+  <script type="text/javascript" src="../js/url.js"></script>
+  <script type="text/javascript" src="../js/main.js"></script>
+  <script src="../assets/sweet-alert/sweetalert.js"></script>
+  <script src="../assets/sweet-alert/toastr/toastr.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../assets/sweet-alert/toastr/toastr.min.css">
+  <script src="../assets/sweet-alert/block/jquery.blockUI.js"></script>
+  <script type="text/javascript">
+    var table;
+    $(document).ready(function() {
+ 
+      //datatables
+      table = $('#table_list_guru').DataTable();
+
+    });
+  </script>
+</body>
+</html>
