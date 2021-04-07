@@ -41,7 +41,7 @@
     <a href="index.html" class="logo">Koperasi Guru</a>
     <button type="button" class="button-close fa fa-times js__menu_close"></button>
     <div class="user">
-      <a href="#" class="avatar"><img src="http://placehold.it/80x80" alt=""><span class="status online"></span></a>
+      <a href="#" class="avatar"><img src="../assets/images/admin.png" alt=""><span class="status online"></span></a>
       <h5 class="name"></h5>
       <h5 class="position"></h5>
       <!-- /.name -->
@@ -109,34 +109,56 @@
 </div>
 <!-- /.fixed-navbar -->
 
+<div class="modal fade" id="sini_modalnya" role="dialog">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body row">
+        <p>This is a small modal.</p>
+      </div>
+      <div class="modal-footer">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div id="wrapper">
   <div class="main-content">
     <div class="row small-spacing">
       <div class="col-lg-6 col-xs-12">
         <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF">Form Penambahan Guru</h4>
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_tambah_user')">Form Penambahan Guru</h4>
           <!-- /.box-title -->
-          <div class="card-content">
-            <form>
+          <div class="card-content" style="overflow-x: auto; display: none;" id="div_tambah_user">
+            <form id="sini_form">
               <div class="form-group">
                 <label for="exampleInputEmail1">NIK Guru</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Masukkan NIK Guru">
+                <input type="text" class="form-control"  id="nik_user" name="nik_user" placeholder="Masukkan NIK Guru" maxlength="16" onkeypress="return isNumberKey(event)" >
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">Nama Guru</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Nama">
+                <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan Nama">
               </div>
               <div class="form-group">
+                <label for="exampleInputPassword1">Alamat</label>
+                <textarea name="alamat" id="alamat" class="form-control" style="resize: none;" placeholder="Masukkan Alamat"></textarea>
+              </div>
+
+              <div class="form-group">
                 <label for="exampleInputEmail1">Simpanan Pokok</label>
-                <select class="form-control" id="simpanan_pokok">
+                <select class="form-control" id="simpanan_pokok" name="simpanan_pokok">
                   <option disabled="" selected="" value="">-Pilih Simpanan Pokok</option>
                   <option value="10000000">Rp. 10,000,000</option>
                   <option value="15000000">Rp. 15,000,000</option>
                   <option value="20000000">Rp. 20,000,000</option>
                 </select>
               </div>
-              <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Tambah Guru</button></center>
+              <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="tambah_user()">Tambah Guru</button></center>
             </form>
           </div>
           <!-- /.card-content -->
@@ -147,9 +169,9 @@
 
       <div class="col-lg-6 col-xs-12">
         <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF">List Guru</h4>
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_table_user')">List Guru</h4>
           <!-- /.box-title -->
-          <div class="card-content" style="overflow-x: auto;">
+          <div class="card-content" style="overflow-x: auto; display: none;" id="div_table_user">
             <table id="table_list_guru" class="table table-striped table-bordered display" style="width:100%">
               <thead>
                 <tr>
@@ -158,29 +180,11 @@
                   <th>Nama</th>
                   <th>Tanggal Daftar</th>
                   <th>Simpanan Pokok</th>
+                  <th>Status</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
               
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>1234567890123456</td>
-                  <td>Guru 1</td>
-                  <td>30-08-2001</td>
-                  <td>Rp. 15,000,000</td>
-                  <td><button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Detail</button></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>1234567890123456</td>
-                  <td>Guru 2</td>
-                  <td>27-05-2009</td>
-                  <td>Rp. 15,000,000</td>
-                  <td><button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Detail</button></td>
-                </tr>
-                
-              </tbody>
             </table>
             <hr>
             <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Cetak Laporan</button></center>
@@ -232,12 +236,292 @@
   <script src="../assets/sweet-alert/block/jquery.blockUI.js"></script>
   <script type="text/javascript">
     var table;
-    $(document).ready(function() {
- 
-      //datatables
-      table = $('#table_list_guru').DataTable();
+    function datatables() {
+      table = $('#table_list_guru').DataTable({ 
+        // "searching": false,
+        "lengthMenu": [ [5, 10, 15, -1], [5, 10, 15, "All"] ],
+        "pageLength": 15,
+        "ordering": true,
+        "processing": true, 
+        "serverSide": true, 
+        "order": [[ 4, 'desc' ]], 
+         
+        "ajax": {
+          "url": url,
+          "type": "POST",
+          data : {proses : 'table_user'}
+        },
 
-    });
+        "columnDefs": [
+          { 
+            "targets": [ 0 ,6], 
+            "orderable": false, 
+          },
+        ],
+      });
+    }
+    datatables()
+
+    async function tambah_user(){
+      // console.log('sini tambah user');
+      const nik_user = $("#nik_user").val();
+      const nama = $("#nama").val();
+      const alamat = $("#alamat").val();
+      const simpanan_pokok = $("#simpanan_pokok").val();
+      // console.log(nik_user)
+      // console.log(nama)
+      // console.log(simpanan_pokok)
+      if(nik_user == ''){
+        toastnya('NIK User Harus Terisi');
+        $("#nik_user").focus();
+      }
+      else if(nik_user.length != 16){
+        toastnya('NIK User Harus Panjang 16 Karakter');
+        $("#nik_user").focus();
+      }
+      else if(nama == ''){
+        toastnya('Nama User Harus Terisi');
+        $("#nama").focus();
+      }
+      else if(alamat == ''){
+        toastnya('Alamat Harus Terisi');
+        $("#alamat").focus();
+      }
+      else if(simpanan_pokok == null){
+        toastnya('Simpanan Pokok Harus Terpilih');
+        $("#simpanan_pokok").focus();
+      }else{
+        // console.log('jalankan')
+        let data = $("#sini_form").serializeArray();
+        data = objectifyForm(data)
+        // console.log(objectifyForm(data))
+        $.ajax({
+          url: url+"api/user/",
+          type: 'post',
+          data: {data : data },
+          beforeSend: function(res) {
+                               
+            $.blockUI({ 
+              message: "Sedang Diproses", 
+              css: { 
+              border: 'none', 
+              padding: '15px', 
+              backgroundColor: '#000', 
+              '-webkit-border-radius': '10px', 
+              '-moz-border-radius': '10px', 
+              opacity: .5, 
+              color: '#fff' 
+            } });
+          },
+          success:  function  (response) {
+            $('#sini_form')[0].reset();
+            $.unblockUI();
+            $('#table_list_guru').dataTable().fnDestroy();
+            datatables()
+            console.log(response)
+            swal({
+              title : "Success",
+              text:  "User Baru Berhasil Ditambah,\nUsername dan Password adalah NIK User yang dimasukkan",
+              icon: "success",
+              buttons: {
+                cancel: false,
+                confirm: false,
+              },
+              timer : 1500
+              // dangerMode: true,
+            })
+            
+          },
+          error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            console.log(errorThrown)
+            $.unblockUI();
+            switch (errorThrown) {
+              case "Bad Request":
+                toastnya(`NIK ${nik_user} telah terdaftar dalam sistem sebelumnya`)
+                $("#nik_user").focus()
+                break;
+              case "Internal Server Error":
+                toastnya(errorThrown)
+                break;
+              default:
+                swal({
+                  text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                  icon: "warning",
+                  buttons: {
+                      cancel: false,
+                      confirm: true,
+                    },
+                  // dangerMode: true,
+                })
+                .then((hehe) =>{
+                  location.reload();
+                });
+                break;
+            }
+           
+          } 
+        });
+
+      }
+    }
+
+    async function detail_user(nik_user){
+      // console.log(nik_user)
+      let data = await JSON.parse( $.ajax({
+        url: url+"api/user",
+        type: 'get',
+        data: {where : {nik_user : nik_user} },
+        async : false
+      }).responseText).data[0];
+
+      // console.log(data)
+
+      let html =  `<div class="row small-spacing">
+        <div class="col-lg-12 col-xs-12">
+          <form class="card-content" id="sini_form_detail" >
+            <div class="form-group">
+              <label for="exampleInputEmail1">NIK User</label>
+              <input type="text" class="form-control" id="nik_user_deyail" name="nik_user" value="${data.nik_user}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Nama</label>
+              <input type="text" class="form-control" id="nama_detail" name="nama" value="${data.nama}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Tanggal Daftar</label>
+              <input type="text" class="form-control" id="tanggal_daftar_detail" name="tanggal_daftar" value="${data.tanggal_daftar}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Simpanan Pokok</label>
+              <input type="text" class="form-control" id="simpanan_pokok_detail" name="simpanan_pokok" value="${data.simpanan_pokok}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Alamat</label>
+              <textarea class="form-control" style="disabled:none" disabled>${data.alamat}</textarea>
+            </div>
+            <div class="form-group">
+              
+            </div>
+                
+          </form>
+          <!-- /.card-content -->
+        </div>
+      </div>`
+
+      let footer = `<a href="user_detail.html?nik_user=${data.nik_user}"><button type="button" class="btn btn-primary btn-xs">Lihat Detail</button></a> <button type="button" onclick="diaktivasi_user(${data.nik_user},'${data.nama}')" class="btn btn-danger btn-xs">Diaktivasi User</button>`
+
+      await $("#sini_modalnya .modal-body").html(html)
+      await $("#sini_modalnya .modal-footer").html(footer)
+      await $("#sini_modalnya .modal-header .modal-title").html("Detail User")
+      await $("#sini_modalnya .modal-dialog").attr('class','modal-dialog')
+      await $('#sini_modalnya').modal('show');
+    }
+
+
+    async function diaktivasi_user(nik_user,nama){
+      // console.log(nik_user)
+      swal({
+        text: `Diaktivasi User atas \n NIK : '${nik_user}'\nNama : ${nama}`,
+        icon: "warning",
+        buttons: {
+            cancel: true,
+            confirm: true,
+          },
+        // dangerMode: true,
+      })
+      .then((hehe) =>{
+        // location.reload();
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+        let h = addZero(today.getHours());
+        let m = addZero(today.getMinutes());
+        let s = addZero(today.getSeconds());
+        today = yyyy+'-'+mm+'-'+dd+' '+h + ":" + m + ":" + s
+        if(hehe){
+          
+          // console.log('jalanakan diaktivasi');
+          let where = { nik_user : nik_user};
+          let detail = {status : 'Tidak Aktif' , tanggal_berhenti : today}
+
+          $.ajax({
+            url: url+"api/user/",
+            type: 'put',
+            data: {where : where, detail : detail },
+            beforeSend: function(res) {
+                                
+              $.blockUI({ 
+                message: "Sedang Diproses", 
+                css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+              } });
+            },
+            success:  function  (response) {
+              // $('#sini_form')[0].reset();
+              $.unblockUI();
+              $('#table_list_guru').dataTable().fnDestroy();
+              datatables()
+              $('#sini_modalnya').modal('hide');
+              console.log(response)
+              swal({
+                title : "Success",
+                text:  "User Berhasil Diaktivasi",
+                icon: "success",
+                buttons: {
+                  cancel: false,
+                  confirm: false,
+                },
+                timer : 3000
+                // dangerMode: true,
+              })
+              
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+              console.log(errorThrown)
+              $.unblockUI();
+              switch (errorThrown) {
+                case "Bad Request":
+                  toastnya(`Request Yang Dilakukan Gagal`)
+                  // $("#nik_user").focus()
+                  break;
+                case "Internal Server Error":
+                  toastnya(errorThrown)
+                  break;
+                default:
+                  swal({
+                    text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                    icon: "warning",
+                    buttons: {
+                        cancel: false,
+                        confirm: true,
+                      },
+                    // dangerMode: true,
+                  })
+                  .then((hehe) =>{
+                    location.reload();
+                  });
+                  break;
+              }
+            
+            } 
+          });
+
+        }
+      });
+    
+    
+    }
+
+    
+
+    
   </script>
 </body>
 </html>

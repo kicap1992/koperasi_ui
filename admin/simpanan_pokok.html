@@ -41,7 +41,7 @@
     <a href="index.html" class="logo">Koperasi Guru</a>
     <button type="button" class="button-close fa fa-times js__menu_close"></button>
     <div class="user">
-      <a href="#" class="avatar"><img src="http://placehold.it/80x80" alt=""><span class="status online"></span></a>
+      <a href="#" class="avatar"><img src="../assets/images/admin.png" alt=""><span class="status online"></span></a>
       <h5 class="name"></h5>
       <h5 class="position"></h5>
       <!-- /.name -->
@@ -116,9 +116,9 @@
       
       <div class="col-lg-12 col-xs-12">
         <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF">List Simpnan Pokok Guru</h4>
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_list_simpanan')">List Simpnan Pokok Guru</h4>
           <!-- /.box-title -->
-          <div class="card-content" style="overflow-x: auto;">
+          <div class="card-content" style="overflow-x: auto; display: none;" id="div_list_simpanan">
             <table id="table_list_guru" class="table table-striped table-bordered display" style="width:100%">
               <thead>
                 <tr>
@@ -127,29 +127,12 @@
                   <th>Nama</th>
                   <th>Tanggal Daftar</th>
                   <th>Simpanan Pokok</th>
-                  <th>Aksi</th>
+                  <th>Status</th>
+                  <!-- <th>Aksi</th> -->
                 </tr>
               </thead>
               
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>1234567890123456</td>
-                  <td>Guru 1</td>
-                  <td>30-08-2001</td>
-                  <td>Rp. 15,000,000</td>
-                  <td><button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Detail</button></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>1234567890123456</td>
-                  <td>Guru 2</td>
-                  <td>27-05-2009</td>
-                  <td>Rp. 15,000,000</td>
-                  <td><button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Detail</button></td>
-                </tr>
-                
-              </tbody>
+              
             </table>
             <hr>
             <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Cetak Laporan</button></center>
@@ -201,12 +184,31 @@
   <script src="../assets/sweet-alert/block/jquery.blockUI.js"></script>
   <script type="text/javascript">
     var table;
-    $(document).ready(function() {
- 
-      //datatables
-      table = $('#table_list_guru').DataTable();
+    function datatables() {
+      table = $('#table_list_guru').DataTable({ 
+        // "searching": false,
+        "lengthMenu": [ [5, 10, 15, -1], [5, 10, 15, "All"] ],
+        "pageLength": 15,
+        "ordering": true,
+        "processing": true, 
+        "serverSide": true, 
+        "order": [[ 4, 'desc' ]], 
+         
+        "ajax": {
+          "url": url,
+          "type": "POST",
+          data : {proses : 'table_simpanan_pokok'}
+        },
 
-    });
+        "columnDefs": [
+          { 
+            "targets": [ 0 ], 
+            "orderable": false, 
+          },
+        ],
+      });
+    }
+    datatables()
   </script>
 </body>
 </html>

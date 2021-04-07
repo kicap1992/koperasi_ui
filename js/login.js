@@ -1,15 +1,18 @@
-let level = localStorage.getItem("level");
-let nik = localStorage.getItem("nik");
+let level = localStorage.getItem("level") ?? null;
+let nik = localStorage.getItem("nik") ?? null;
 
-if (level != '' && level != null) {
+// console.log(level)
+// console.log(nik)
+
+if (level != null && nik != null) {
   let res = JSON.parse($.ajax({
-    url: url,
-    type: 'post',
-    data: {nik : nik,level : level,proses : 'cek_data'},
+    url: url+'api/login',
+    type: 'get',
+    data: {where:{nik : nik,level : level}},
     async : false,
   }).responseText);
 
-  // console.log(res)
+  console.log(res)
   switch (res.res) {
     case 'ok':
       window.location.href = res.url
@@ -36,9 +39,9 @@ function login () {
   }else{
     // console.log('jalankan')
     $.ajax({
-      url: url,
-      type: 'post',
-      data: {username : username, password : password, proses : 'login'},
+      url: url+'api/login',
+      type: 'get',
+      data: {where : {username : username , password : password}},
       
       beforeSend: function(res) {
                            
@@ -56,7 +59,7 @@ function login () {
       },
       success:  function  (response) {
         $.unblockUI();
-        console.log(response)
+        // console.log(response)
         localStorage.setItem("level", response.level);
         localStorage.setItem('nik', response.nik)
         swal({
@@ -71,6 +74,8 @@ function login () {
           // dangerMode: true,
         })
         .then((hehe) =>{
+          // console.log(localStorage.getItem("level"));
+          // console.log(localStorage.getItem("nik"));
           location.reload();
         });
         
