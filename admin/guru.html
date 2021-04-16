@@ -68,7 +68,7 @@
             <li><a href="simpanan_pokok.html">Simpanan Pokok</a></li>
             <li><a href="simpanan_wajib.html">Simpanan Wajib</a></li>
             <li><a href="simpanan_sukarela.html">Simpanan Sukarela</a></li>
-            <li><a href="pinjaman.html">Pinjaman</a></li>
+            <li><a href="pinjaman.html">Pinjaman / Pengembalian</a></li>
           </ul>
           <!-- /.sub-menu js__content -->
         </li>
@@ -389,11 +389,11 @@
             </div>
             <div class="form-group">
               <label for="exampleInputEmail1">Tanggal Daftar</label>
-              <input type="text" class="form-control" id="tanggal_daftar_detail" name="tanggal_daftar" value="${data.tanggal_daftar}" disabled>
+              <input type="text" class="form-control" id="tanggal_daftar_detail" name="tanggal_daftar" value="${data.tanggal_pendaftaran}" disabled>
             </div>
             <div class="form-group">
               <label for="exampleInputEmail1">Simpanan Pokok</label>
-              <input type="text" class="form-control" id="simpanan_pokok_detail" name="simpanan_pokok" value="${data.simpanan_pokok}" disabled>
+              <input type="text" class="form-control" id="simpanan_pokok_detail" name="simpanan_pokok" value="Rp. ${numberWithCommas(data.simpanan_pokok)}" disabled>
             </div>
             <div class="form-group">
               <label for="exampleInputEmail1">Alamat</label>

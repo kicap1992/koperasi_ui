@@ -69,7 +69,7 @@
             <li><a href="simpanan_pokok.html">Simpanan Pokok</a></li>
             <li class="current"><a href="simpanan_wajib.html">Simpanan Wajib</a></li>
             <li><a href="simpanan_sukarela.html">Simpanan Sukarela</a></li>
-            <li><a href="pinjaman.html">Pinjaman</a></li>
+            <li><a href="pinjaman.html">Pinjaman / Pengembalian</a></li>
           </ul>
           <!-- /.sub-menu js__content -->
         </li>
@@ -368,6 +368,9 @@
                 $('#table_list_guru').dataTable().fnDestroy();
                 datatables()
                 $('#sini_modalnya').modal('hide');
+                $('#simpanan_wajib').val(null);
+                $('#tanggal_simpanan_wajib').val(null);
+                $("#input_nik_pembeli").val([0]).trigger('change')
                 // console.log(response)
                 swal({
                   title : "Success",

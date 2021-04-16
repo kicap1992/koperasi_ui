@@ -27,6 +27,7 @@
   <!-- <link rel="stylesheet" href="../assets/plugin/datatables/extensions/Responsive/css/responsive.bootstrap.min.css"> -->
   <link rel="stylesheet" href="../assets/fonts/material-design/css/materialdesignicons.css">
   <link rel="stylesheet" href="../assets/sweet-alert/sweetalert.css">
+  <link rel="stylesheet" href="../assets/plugin/select2/css/select2.min.css">
   <style type="text/css">
     .swal-modal .swal-text {
       text-align: center;
@@ -68,7 +69,7 @@
             <li><a href="simpanan_pokok.html">Simpanan Pokok</a></li>
             <li><a href="simpanan_wajib.html">Simpanan Wajib</a></li>
             <li><a href="simpanan_sukarela.html">Simpanan Sukarela</a></li>
-            <li"><a href="pinjaman.html">Pinjaman</a></li>
+            <li"><a href="pinjaman.html">Pinjaman / Pengembalian</a></li>
           </ul>
           <!-- /.sub-menu js__content -->
         </li>
@@ -110,36 +111,54 @@
 <!-- /.fixed-navbar -->
 
 
+<div class="modal fade" id="sini_modalnya" role="dialog">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body row">
+        <p>This is a small modal.</p>
+      </div>
+      <div class="modal-footer">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="wrapper">
   <div class="main-content">
     <div class="row small-spacing">
       <div class="col-lg-6 col-xs-12">
         <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF">Form Penambahan Barang Baru</h4>
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_penambahan_barang')">Form Penambahan Barang Baru</h4>
           <!-- /.box-title -->
-          <div class="card-content">
-            <form>
+          <div class="card-content" style="overflow-x: auto; display: none;" id="div_penambahan_barang">
+            <form id="sini_tambah_barang">
               <div class="form-group">
                 <label for="exampleInputEmail1">Nama Barang</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Masukkan Nama Barang">
+                <input type="text" class="form-control" id="nama_barang" name="nama_barang"  placeholder="Masukkan Nama Barang">
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">Jumlah</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Jumlah">
+                <input type="text" class="form-control" maxlength="10" id="jumlah" name="jumlah" onkeypress="return isNumberKey(event)"  placeholder="Masukkan Jumlah">
               </div>
               <div class="form-group">
                 <label for="exampleInputEmail1">Satuan</label>
-                <select class="form-control">
+                <select class="form-control" id="satuan" name="satuan">
                   <option selected="" disabled="" value="">-Pilih Satuan Barang</option>
                   <option value="Kg">Kilogram</option>
+                  <option value="Paket">Paket</option>
                   <option value="Karton">Karton</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">Harga Pinjaman (<i>Rp. </i>) / Per Unit</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Harga Pinjaman (Rp.)">
+                <input type="text" class="form-control" id="harga" name="harga"  placeholder="Masukkan Harga Pinjaman (Rp.)">
               </div>
-              <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Tambah Barang</button></center>
+              <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="tambah_barang()">Tambah Barang</button></center>
             </form>
           </div>
           <!-- /.card-content -->
@@ -147,28 +166,29 @@
         <!-- /.box-content -->
 
         <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF">Form Peminjaman Barang</h4>
+          <h4 class="box-title" style="background: #0055FF" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_form_pinjamam')">Form Peminjaman Barang</h4>
           <!-- /.box-title -->
-          <div class="card-content">
+          <div class="card-content" style="overflow-x: auto; display: none;" id="div_form_pinjamam">
             <form>
               <div class="form-group">
-                <label for="exampleInputEmail1">Nama Barang</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Masukkan Nama Barang">
-              </div>
-              <div class="form-group">
-                <label for="exampleInputPassword1">Jumlah</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Jumlah">
-              </div>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Satuan</label>
-                <select class="form-control">
-                  <option selected="" disabled="" value="">-Pilih Satuan Barang</option>
-                  <option value="Kg">Kilogram</option>
-                  <option value="Karton">Karton</option>
+                <label for="exampleInputEmail1">NIK Guru</label>
+                <select name="nik_user" id="nik_user_pinjaman" class="form-control input_nik_pembeli" style="width: 100%" >
+                  <option value='0'>- Cari User -</option>
                 </select>
               </div>
-              <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Update Pinjaman</button></center>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Pencarian Barang</label>
+                <select name="id_barang_pinjaman" id="id_barang_pinjaman" class="form-control select_cari_barang" style="width: 100%" onchange="select_barang_onchange(value,'pinjaman')">
+                  <option value='0'>- Cari Barang -</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label id="jumlah_satuan_pinjaman">Jumlah</label>
+                <input type="text" class="form-control" onkeypress="return isNumberKey(event)" id="jumlah_pinjaman"  placeholder="Masukkan Jumlah">
+              </div>
+              
             </form>
+            <center><button type="button" onclick="berikan_pinjaman()" class="btn btn-primary btn-sm waves-effect waves-light">Update Pinjaman</button></center>
           </div>
           <!-- /.card-content -->
         </div>
@@ -177,10 +197,10 @@
 
       <div class="col-lg-6 col-xs-12">
         <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF">List Barang</h4>
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_list_barang')">List Barang</h4>
           <!-- /.box-title -->
-          <div class="card-content" style="overflow-x: auto;">
-            <table id="table_list_guru" class="table table-striped table-bordered display" style="width:100%">
+          <div class="card-content" style="overflow-x: auto; display: none;" id="div_list_barang">
+            <table id="tb_barang" class="table table-striped table-bordered display" style="width:100%">
               <thead>
                 <tr>
                   <th>No</th>
@@ -191,23 +211,6 @@
                 </tr>
               </thead>
               
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>1234567890123456</td>
-                  <td>Guru 1</td>
-                  <td>30-08-2001</td>
-                  <td><button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Detail</button></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>1234567890123456</td>
-                  <td>Guru 2</td>
-                  <td>27-05-2009</td>
-                  <td><button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Detail</button></td>
-                </tr>
-                
-              </tbody>
             </table>
             <hr>
             <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Cetak Laporan</button></center>
@@ -215,6 +218,34 @@
           <!-- /.card-content -->
         </div>
         <!-- /.box-content -->
+
+        <div class="box-content card">
+          <h4 class="box-title" style="background: #0055FF" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_form_pengembalian')">Form Pengembalian Barang</h4>
+          <!-- /.box-title -->
+          <div class="card-content" style="overflow-x: auto; display: none;" id="div_form_pengembalian">
+            <form>
+              <div class="form-group">
+                <label for="exampleInputEmail1">NIK Guru</label>
+                <select name="nik_user" id="nik_user_pengembalian" class="form-control input_nik_pembeli" style="width: 100%" >
+                  <option value='0'>- Cari User -</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Pencarian Barang</label>
+                <select name="id_barang_pengembalian" id="id_barang_pengembalian" class="form-control select_cari_barang" style="width: 100%" onchange="select_barang_onchange(value,'pengembalian')">
+                  <option value='0'>- Cari Barang -</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label id="jumlah_satuan_pengembalian">Jumlah</label>
+                <input type="text" class="form-control" onkeypress="return isNumberKey(event)" id="jumlah_pengembalian"  placeholder="Masukkan Jumlah">
+              </div>
+              
+            </form>
+            <center><button type="button" onclick="berikan_pengembalian()" class="btn btn-primary btn-sm waves-effect waves-light">Update Pengembalian</button></center>
+          </div>
+          <!-- /.card-content -->
+        </div>
       </div>
 
       
@@ -257,14 +288,981 @@
   <script src="../assets/sweet-alert/toastr/toastr.min.js"></script>
   <link rel="stylesheet" type="text/css" href="../assets/sweet-alert/toastr/toastr.min.css">
   <script src="../assets/sweet-alert/block/jquery.blockUI.js"></script>
+  <script src="../assets/plugin/select2/js/select2.min.js"></script>
+  <script src="../assets/scripts/form.demo.min.js"></script>
   <script type="text/javascript">
     var table;
-    $(document).ready(function() {
- 
-      //datatables
-      table = $('#table_list_guru').DataTable();
+    function datatables() {
+      table = $('#tb_barang').DataTable({ 
+        // "searching": false,
+        "lengthMenu": [ [5, 10, 15, -1], [5, 10, 15, "All"] ],
+        "pageLength": 15,
+        "ordering": true,
+        "processing": true, 
+        "serverSide": true, 
+        "order": [[ 1, 'desc' ]], 
+         
+        "ajax": {
+          "url": url,
+          "type": "POST",
+          data : {proses : 'table_barang'}
+        },
 
+        "columnDefs": [
+          { 
+            "targets": [ 0 , 4], 
+            "orderable": false, 
+          },
+        ],
+      });
+    }
+    datatables()  
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+
+    $(".input_nik_pembeli").select2({
+      ajax: {
+        url: url,
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            searchTerm: params.term,
+            proses : 'cari_usernya' // search term
+          };
+        },
+        processResults: function (response) {
+          // console.log(response)
+          return {
+            results: response
+          };
+        },
+        cache: true
+      }
     });
+
+    $(".select_cari_barang").select2({
+      ajax: {
+        url: url,
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            searchTerm: params.term,
+            proses : 'cari_barangnya' // search term
+          };
+        },
+        processResults: function (response) {
+          // console.log(response)
+          return {
+            results: response
+          };
+        },
+        cache: true
+      }
+    });
+
+    async function berikan_pengembalian(){
+      // console.log('sini berikan pengembalian')
+      const nik_user = $("#nik_user_pengembalian").val()
+      let id_barang = $("#id_barang_pengembalian").val()
+      const jumlah_pengembalian = $("#jumlah_pengembalian").val()
+
+      
+
+      if(nik_user == 0){
+        toastnya('NIK User Harus Terisi / Dicari');
+        $("#nik_user_pengembalian").focus()
+      }else if(id_barang == 0){
+        toastnya('Barang Harus Terisi / Dicari');
+        $("#id_barang_pengembalian").focus()
+      }else if(jumlah_pengembalian == ''){
+        toastnya('Jumlah pengembalian Harus Terisi');
+        $("#jumlah_pengembalian").focus()
+      }else{
+        let detail_barang = id_barang.split("/")
+        let data_user = await JSON.parse( $.ajax({
+          url: url+"api/user",
+          type: 'get',
+          data: {where : {nik_user : nik_user} },
+          async : false
+        }).responseText).data[0];
+        // console.log(data_user)
+        let data_pinjaman =  (data_user?.pinjaman_barang != null) ? JSON.parse(data_user?.pinjaman_barang) : null;
+        let data_kembalian =  (data_user?.pengembalian_barang != null) ? JSON.parse(data_user?.pengembalian_barang) : null;
+
+        let jumlah_pinjaman = 0;
+        let jumlah_kembalian = 0;
+        // console.log(data_pinjaman)
+        // console.log(data_kembalian)
+
+        if(data_pinjaman != null){
+          data_pinjaman.forEach((element,index) => {
+            
+            if(detail_barang[0] == element.id_barang){
+              jumlah_pinjaman += Number(element.pinjaman)
+            }
+          });
+        }
+
+
+        if(data_kembalian != null){
+          data_kembalian.forEach((element,index) => {
+            // console.log(detail_barang[0])
+
+            console.log(element)
+            if(detail_barang[0] == element.id_barang){
+              jumlah_kembalian += Number(element.pengembalian)
+            }
+          });
+        }
+
+
+        let sisa_pinjaman = Number(jumlah_pinjaman) - Number(jumlah_kembalian);
+        let all_pinjam_kembali = Number(jumlah_pinjaman) - Number(jumlah_kembalian) - Number(jumlah_pengembalian);
+
+        console.log(jumlah_pinjaman)
+        console.log(jumlah_kembalian)
+        console.log(sisa_pinjaman)
+        console.log(all_pinjam_kembali)
+        
+
+        let all_pengembalian = Number(detail_barang[2]) + Number(jumlah_pengembalian);
+        let where = {id_barang : detail_barang[0]};
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+        let h = addZero(today.getHours());
+        let m = addZero(today.getMinutes());
+        let s = addZero(today.getSeconds());
+        today1 = yyyy+'-'+mm+'-'+dd+' '+h + ":" + m + ":" + s
+        let detail_pengembalian = [{tanggal : today1, stok_sebelumnya : detail_barang[2], pengembalian : jumlah_pengembalian, jumlah_stok : all_pengembalian, nik_user : nik_user}]
+        let detail = {log_pengembalian : JSON.stringify(detail_pengembalian) , jumlah : all_pengembalian }
+
+
+
+
+        if(sisa_pinjaman == 0){
+          toastnya(`${data_user?.nama} Belum Atau telah mengembalikan semua ${detail_barang[3]} yang dipinjam sebelumnya`);
+          $("#jumlah_pengembalian").focus();
+        }
+        
+        else if(all_pinjam_kembali < 0){
+          toastnya("Jumlah Pengembalian Melebihi Jumlah Pinjaman Sebelumnya\nSisa Pinjaman "+detail_barang[3]+' Yang Belum Dikembalikan Adalah \n'+ sisa_pinjaman +' '+ detail_barang[1]);
+          $("#jumlah_pengembalian").focus();
+        }
+        
+        else{
+          // console.log('jalankan')
+          swal({
+            // title : "Success",
+            text:  "Kembalikan Pinjaman Barang ?",
+            icon: "info",
+            buttons: {
+              cancel: true,
+              confirm: true,
+            },
+            // timer : 3000
+            // dangerMode: true,
+          }).
+          then((hehe)=>{
+            if (hehe) {
+              $.ajax({
+                url: url+"api/barang/",
+                type: 'put',
+                data: {detail : detail, where : where },
+                beforeSend: function(res) {
+                                    
+                  $.blockUI({ 
+                    message: "Sedang Diproses", 
+                    css: { 
+                    border: 'none', 
+                    padding: '15px', 
+                    backgroundColor: '#000', 
+                    '-webkit-border-radius': '10px', 
+                    '-moz-border-radius': '10px', 
+                    opacity: .5, 
+                    color: '#fff' 
+                  } });
+                },
+                success:  function  (response) {
+                  $.unblockUI();
+                  console.log(response)
+                  // $('#sini_tambah_barang')[0].reset();
+                  $('#tb_barang').dataTable().fnDestroy();
+                  datatables()
+                  $("#nik_user_pengembalian").val([0]).trigger('change')
+                  $("#id_barang_pengembalian").val([0]).trigger('change')
+                  $("#jumlah_pengembalian").val(null)
+                  $(`#jumlah_satuan_pengembalian`).html(`Jumlah`)
+                  // $('#sini_modalnya').modal('hide');
+
+                  
+                  swal({
+                    title : "Success",
+                    text:  "Pinjaman Barang  Berhasil",
+                    icon: "success",
+                    buttons: {
+                      cancel: false,
+                      confirm: false,
+                    },
+                    timer : 3000
+                    // dangerMode: true,
+                  })
+
+                  
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                  // console.log(errorThrown)
+                  // console.log(textStatus)
+                  // console.log(XMLHttpRequest)
+                  $.unblockUI();
+                  switch (errorThrown) {
+                    case "Bad Request":
+                      toastnya(`Request Tidak Berhasil`);
+                      break;
+                    case "Internal Server Error":
+                      toastnya(errorThrown)
+                      break;
+                    default:
+                      swal({
+                        text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                        icon: "warning",
+                        buttons: {
+                            cancel: false,
+                            confirm: true,
+                          },
+                        // dangerMode: true,
+                      })
+                      .then((hehe) =>{
+                        location.reload();
+                      });
+                      break;
+                  }
+                
+                } 
+              });
+
+          
+            }
+          })
+
+        }
+      
+
+        
+      }
+    }
+
+
+
+    async function berikan_pinjaman(){
+      // console.log('sini berikan pinjaman')
+      const nik_user = $("#nik_user_pinjaman").val()
+      let id_barang = $("#id_barang_pinjaman").val()
+      const jumlah_pinjaman = $("#jumlah_pinjaman").val()
+
+      if(nik_user == 0){
+        toastnya('NIK User Harus Terisi / Dicari');
+        $("#nik_user_pinjaman").focus()
+      }else if(id_barang == 0){
+        toastnya('Barang Harus Terisi / Dicari');
+        $("#id_barang_pinjaman").focus()
+      }else if(jumlah_pinjaman == ''){
+        toastnya('Jumlah Pinjaman Harus Terisi');
+        $("#jumlah_pinjaman").focus()
+      }else{
+        // console.log(nik_user)
+        let detail_barang = id_barang.split("/")
+        // console.log(detail_barang)
+
+        let all_pinjaman = Number(detail_barang[2]) - Number(jumlah_pinjaman);
+        let where = {id_barang : detail_barang[0]};
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+        let h = addZero(today.getHours());
+        let m = addZero(today.getMinutes());
+        let s = addZero(today.getSeconds());
+        today1 = yyyy+'-'+mm+'-'+dd+' '+h + ":" + m + ":" + s
+        let detail_pinjaman = [{tanggal : today1, stok_sebelumnya : detail_barang[2], pinjaman : jumlah_pinjaman, jumlah_stok : all_pinjaman, nik_user : nik_user}]
+        let detail = {log_pinjaman : JSON.stringify(detail_pinjaman) , jumlah : all_pinjaman }
+
+        // console.log(all_pinjaman)
+        if(all_pinjaman < 0){
+          toastnya("Jumlah Pinjaman Melebihi Stok Yang Ada");
+          $("#jumlah_pinjaman").focus();
+        }else{
+          // console.log('jalankan')
+          swal({
+            // title : "Success",
+            text:  "Berikan Pinjaman Barang ?",
+            icon: "info",
+            buttons: {
+              cancel: true,
+              confirm: true,
+            },
+            // timer : 3000
+            // dangerMode: true,
+          }).
+          then((hehe)=>{
+            if (hehe) {
+              $.ajax({
+                url: url+"api/barang/",
+                type: 'put',
+                data: {detail : detail, where : where },
+                beforeSend: function(res) {
+                                    
+                  $.blockUI({ 
+                    message: "Sedang Diproses", 
+                    css: { 
+                    border: 'none', 
+                    padding: '15px', 
+                    backgroundColor: '#000', 
+                    '-webkit-border-radius': '10px', 
+                    '-moz-border-radius': '10px', 
+                    opacity: .5, 
+                    color: '#fff' 
+                  } });
+                },
+                success:  function  (response) {
+                  $.unblockUI();
+                  console.log(response)
+                  // $('#sini_tambah_barang')[0].reset();
+                  $('#tb_barang').dataTable().fnDestroy();
+                  datatables()
+                  $("#nik_user_pinjaman").val([0]).trigger('change')
+                  $("#id_barang_pinjaman").val([0]).trigger('change')
+                  $("#jumlah_pinjaman").val(null)
+                  $(`#jumlah_satuan_pinjaman`).html(`Jumlah`)
+                  // $('#sini_modalnya').modal('hide');
+
+                  
+                  swal({
+                    title : "Success",
+                    text:  "Pinjaman Barang  Berhasil",
+                    icon: "success",
+                    buttons: {
+                      cancel: false,
+                      confirm: false,
+                    },
+                    timer : 3000
+                    // dangerMode: true,
+                  })
+
+                  
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                  // console.log(errorThrown)
+                  // console.log(textStatus)
+                  // console.log(XMLHttpRequest)
+                  $.unblockUI();
+                  switch (errorThrown) {
+                    case "Bad Request":
+                      toastnya(`Request Tidak Berhasil`);
+                      break;
+                    case "Internal Server Error":
+                      toastnya(errorThrown)
+                      break;
+                    default:
+                      swal({
+                        text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                        icon: "warning",
+                        buttons: {
+                            cancel: false,
+                            confirm: true,
+                          },
+                        // dangerMode: true,
+                      })
+                      .then((hehe) =>{
+                        location.reload();
+                      });
+                      break;
+                  }
+                
+                } 
+              });
+
+          
+            }
+          })
+
+        }
+      
+      }
+    }
+
+
+    async function select_barang_onchange(value,stat){
+      // console.log(sat);
+      valuenya = value.split("/");
+      // console.log(valuenya)
+      $(`#jumlah_satuan_${stat}`).html(`Jumlah <i>(${valuenya[1]})</i>`)
+    }
+
+
+
+    async function tambah_barang (){
+      const nama_barang = $("#nama_barang").val()
+      let jumlah = $("#jumlah").val()
+      let satuan = $("#satuan").val()
+      let harga = $("#harga").val()
+
+      if(nama_barang == ''){
+        toastnya('Nama Barang Harus Terisi');
+        $("#nama_barang").focus()
+      }else if(jumlah == ''){
+        toastnya('Jumlah Barang Harus Terisi');
+        $("#jumlah").focus()
+      }else if(satuan == null){
+        toastnya('Satuan Barang Harus Terpilih');
+        $("#satuan").focus()
+      }else if(harga == ""){
+        toastnya('Harga Barang Harus Terisi');
+        $("#harga").focus()
+      }else{
+        
+        swal({
+          text: `Tambah Barang Baru\n${nama_barang}\n?`,
+          icon: "info",
+          buttons: {
+              cancel: true,
+              confirm: true,
+            },
+          // dangerMode: true,
+        })
+        .then((hehe) =>{
+          
+          if(hehe){
+            let data = $("#sini_tambah_barang").serializeArray();
+            data = jQuery.grep(data, function(value) {
+              return value['name'] != 'harga';
+            });
+
+            data.push(
+              {'name' : 'harga',"value" : harga.replace(/\,/g,'')}
+            )
+            data = objectifyForm(data)
+
+            // console.log(data);
+            let h = addZero(today.getHours());
+            let m = addZero(today.getMinutes());
+            let s = addZero(today.getSeconds());
+            today1 = yyyy+'-'+mm+'-'+dd+' '+h + ":" + m + ":" + s
+
+            // console.log(data)
+            // console.log(detail)
+
+            $.ajax({
+              url: url+"api/barang/",
+              type: 'post',
+              data: {detail : data },
+              beforeSend: function(res) {
+                                  
+                $.blockUI({ 
+                  message: "Sedang Diproses", 
+                  css: { 
+                  border: 'none', 
+                  padding: '15px', 
+                  backgroundColor: '#000', 
+                  '-webkit-border-radius': '10px', 
+                  '-moz-border-radius': '10px', 
+                  opacity: .5, 
+                  color: '#fff' 
+                } });
+              },
+              success:  function  (response) {
+                $.unblockUI();
+                console.log(response)
+                $('#sini_tambah_barang')[0].reset();
+                $('#tb_barang').dataTable().fnDestroy();
+                datatables()
+                swal({
+                  title : "Success",
+                  text:  "Penambahan Barang Baru Berhasil",
+                  icon: "success",
+                  buttons: {
+                    cancel: false,
+                    confirm: false,
+                  },
+                  timer : 3000
+                  // dangerMode: true,
+                })
+
+                
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                // console.log(errorThrown)
+                // console.log(textStatus)
+                // console.log(XMLHttpRequest)
+                $.unblockUI();
+                switch (errorThrown) {
+                  case "Bad Request":
+                    toastnya(`Barang ${nama_barang} telah ada dalam sistem sebelumnya`);
+                    $("#nama_barang").focus()
+                    break;
+                  case "Internal Server Error":
+                    toastnya(errorThrown)
+                    break;
+                  default:
+                    swal({
+                      text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                      icon: "warning",
+                      buttons: {
+                          cancel: false,
+                          confirm: true,
+                        },
+                      // dangerMode: true,
+                    })
+                    .then((hehe) =>{
+                      location.reload();
+                    });
+                    break;
+                }
+              
+              } 
+            });
+
+            
+          }
+        });
+      
+      
+
+      }
+
+    
+    }
+
+    async function detail_barang(id_barang){
+      // console.log(nik_user)
+      let data = await JSON.parse( $.ajax({
+        url: url+"api/barang",
+        type: 'get',
+        data: {where : {id_barang : id_barang} },
+        async : false
+      }).responseText).data[0];
+
+      // console.log(data)
+
+      let html =  `<div class="row small-spacing">
+        <div class="col-lg-12 col-xs-12">
+          <form class="card-content" id="sini_form_detail" >
+            <div class="form-group">
+              <label for="exampleInputEmail1">Nama Barang</label>
+              <input type="text" class="form-control"  value="${data?.nama_barang}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Jumlah Stok</label>
+              <input type="text" class="form-control" value="${data?.jumlah} ${data?.satuan}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Harga <i>(Rp.)</i></label>
+              <input type="text" class="form-control" id="harga_edit" placeholder="Isikan Harga Barang"  value="${numberWithCommas(data.harga)}" disabled>
+            </div>
+            <div id="div_tambah_stok_barang"></div>
+            <div class="form-group">
+              <center><button type="button" id="button_tambah_stok_barang" class="btn btn-warning btn-xs" onclick="tambah_stok_barang(1,${data?.jumlah},'${data?.satuan}',${data?.id_barang})">Tambah Stok Barang ?</button> <button type="button" id="button_cancel_tambah_stok_barang" class="btn btn-danger btn-xs" onclick="tambah_stok_barang(0,${data?.jumlah},'${data?.satuan}',${data?.id_barang})" style="display:none">Cancel</button></center>
+            </div>
+          </form>
+          <hr>
+          <!-- /.card-content -->
+        </div>
+        
+        <div class="col-lg-12 col-xs-12">
+          <div class="box-content card">
+            <h4 class="box-title" style="background: #0055FF ;" >List Pinjaman</h4>
+            <div class="card-content" style="overflow-x:auto" >
+              <table id="tb_barang_pinjaman" class="table table-striped table-bordered display" style="width:100%">
+                
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-xs-12">
+          <div class="box-content card">
+            <h4 class="box-title" style="background: #0055FF ;" >List Pengembalian</h4>
+            <div class="card-content" style="overflow-x:auto" >
+              <table id="tb_barang_pengembalian" class="table table-striped table-bordered display" style="width:100%">
+                
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>`
+
+      // let footer = `<a href="user_detail.html?nik_user=${data.nik_user}"><button type="button" class="btn btn-primary btn-xs">Lihat Detail</button></a> <button type="button" onclick="diaktivasi_user(${data.nik_user},'${data.nama}')" class="btn btn-danger btn-xs">Diaktivasi User</button>`
+
+      await $("#sini_modalnya .modal-body").html(html)
+
+      $('#tb_barang_pinjaman').DataTable({
+        responsive: true,
+        "ajax": {
+          "type": "POST",
+          "url": url,
+          "data" :{'proses' : 'table_pinjaman_barang_detail', id_barang : id_barang},
+          "timeout": 120000,
+          "dataSrc": function (json) {
+            // console.log(json);
+            if(json != null){
+              return json
+            } else {
+              return "";
+            }
+          }
+        },
+        "sAjaxDataProp": "",
+        "width": "100%",
+        "order": [[ 0, "asc" ]],
+        "aoColumns": [
+          {
+              "mData": null,
+              "title": "No",
+              render: function (data, type, row, meta) {
+                  return meta.row + meta.settings._iDisplayStart + 1;
+              }
+          },
+          
+          {
+              "mData": null,
+              "title": "Peminjam",
+              "render": function (data, row, type, meta) {
+                  return data.peminjam;
+              }
+          },
+          {
+              "mData": null,
+              "title": "Stok Sebelumnya",
+              "render": function (data, row, type, meta) {
+                  return data.stok_sebelumnya;
+              }
+          },
+          {
+              "mData": null,
+              "title": "Pinjaman",
+              "render": function (data, row, type, meta) {
+                  return data.pinjaman;
+              }
+          },
+          {
+              "mData": null,
+              "title": "Stok Setelah Pinjaman",
+              "render": function (data, row, type, meta) {
+                  return data.jumlah_stok;
+              }
+          },
+          {
+              "mData": null,
+              "title": "Waktu",
+              "render": function (data, row, type, meta) {
+                  return data.waktu;
+              }
+          },
+        ]
+      });
+
+
+      $('#tb_barang_pengembalian').DataTable({
+        responsive: true,
+        "ajax": {
+          "type": "POST",
+          "url": url,
+          "data" :{'proses' : 'table_pengembalian_barang_detail', id_barang : id_barang},
+          "timeout": 120000,
+          "dataSrc": function (json) {
+            // console.log(json);
+            if(json != null){
+              return json
+            } else {
+              return "";
+            }
+          }
+        },
+        "sAjaxDataProp": "",
+        "width": "100%",
+        "order": [[ 0, "asc" ]],
+        "aoColumns": [
+          {
+              "mData": null,
+              "title": "No",
+              render: function (data, type, row, meta) {
+                  return meta.row + meta.settings._iDisplayStart + 1;
+              }
+          },
+          
+          {
+              "mData": null,
+              "title": "Peminjam",
+              "render": function (data, row, type, meta) {
+                  return data.peminjam;
+              }
+          },
+          {
+              "mData": null,
+              "title": "Stok Sebelumnya",
+              "render": function (data, row, type, meta) {
+                  return data.stok_sebelumnya;
+              }
+          },
+          {
+              "mData": null,
+              "title": "Pengembalian",
+              "render": function (data, row, type, meta) {
+                  return data.pengembalian;
+              }
+          },
+          {
+              "mData": null,
+              "title": "Stok Setelah Pinjaman",
+              "render": function (data, row, type, meta) {
+                  return data.jumlah_stok;
+              }
+          },
+          {
+              "mData": null,
+              "title": "Waktu",
+              "render": function (data, row, type, meta) {
+                  return data.waktu;
+              }
+          },
+        ]
+      });
+
+
+      // await $("#sini_modalnya .modal-footer").html(footer)
+      await $("#sini_modalnya .modal-header .modal-title").html("Detail Barang")
+      await $("#sini_modalnya .modal-dialog").attr('class','modal-dialog modal-lg')
+      await $('#sini_modalnya').modal('show');
+    }
+
+
+    async function tambah_stok_barang(stat,jumlah,satuan,id_barang){
+      let html
+      switch (stat) {
+        case 1:
+          $("#button_tambah_stok_barang").attr({
+            class : "btn btn-success btn-xs",
+            onclick : `tambah_stok_barang(2,${jumlah},'${satuan}',${id_barang})`
+          })
+          $("#button_tambah_stok_barang").html("Tambah Stok Barang")
+          $("#button_cancel_tambah_stok_barang").removeAttr('style');
+          $("#harga_edit").removeAttr('disabled');
+
+          html =`<div class="form-group">
+              <label for="exampleInputEmail1">Jumlah Penambahan Barang</label>
+              <input type="text" class="form-control" onkeypress="return isNumberKey(event)" onkeyup="penambahan_barang(${jumlah},'${satuan}',${id_barang})" id="tambah_barang" placeholder="Isikan Jumlah Penambahan barang">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Jumlah Setelah Penambahan</label>
+              <input type="text" class="form-control" onkeypress="return isNumberKey(event)"  id="jumlah_setelah_penambahan" disabled="" placeholder="Isikan Jumlah Penambahan Barang Terlebih Dulu">
+            </div>
+            `
+          
+          $("#div_tambah_stok_barang").html(html)
+
+          const elem = document.getElementById("harga_edit");
+
+          elem.addEventListener("keydown",function(event){
+              var key = event.which;
+              if((key<48 || key>57) && key != 8) event.preventDefault();
+          });
+
+          elem.addEventListener("keyup",function(event){
+              var value = this.value.replace(/,/g,"");
+              this.dataset.currentValue=parseInt(value);
+              var caret = value.length-1;
+              while((caret-3)>-1)
+              {
+                  caret -= 3;
+                  value = value.split('');
+                  value.splice(caret+1,0,",");
+                  value = value.join('');
+              }
+              this.value = value;
+          });
+
+          break;
+      
+        case 0:
+          $("#button_tambah_stok_barang").attr({
+            class : "btn btn-warning btn-xs",
+            onclick : `tambah_stok_barang(1,${jumlah},'${satuan}',${id_barang})`
+          })
+          $("#button_tambah_stok_barang").html("Tambah Stok Barang ? ")
+          $("#button_cancel_tambah_stok_barang").attr('style',"display:none");
+          $("#harga_edit").attr('disabled','');
+
+          $("#div_tambah_stok_barang").html(null)
+          break;
+
+        case 2:
+          const harga = $("#harga_edit").val()
+          const jumlah_tambah_barang = $("#tambah_barang").val();
+
+          if(harga ==''){
+            toastnya("Harga Barang Harus Terisi");
+            $("#harga_edit").focus()
+          }else if(jumlah_tambah_barang == ''){
+            toastnya("Jumlah Penambahan Barang Harus Terisi");
+            $("#tambah_barang").focus()
+          }else{
+            // console.log(id_barang)
+            let all_penambahan = Number($("#tambah_barang").val()) + Number(jumlah);
+            let where = {id_barang : id_barang};
+            let h = addZero(today.getHours());
+            let m = addZero(today.getMinutes());
+            let s = addZero(today.getSeconds());
+            today1 = yyyy+'-'+mm+'-'+dd+' '+h + ":" + m + ":" + s
+            let detail_penambahan = [{tanggal : today1, stok_sebelumnya : jumlah, penambahan : jumlah_tambah_barang, jumlah_stok : all_penambahan}]
+            let detail = {log_penambahan_stok : JSON.stringify(detail_penambahan) , jumlah : all_penambahan , harga : harga}
+
+            // console.log(where)
+            // console.log(detail)
+            
+            swal({
+              // title : "Success",
+              text:  "Tambah Stok Barang",
+              icon: "info",
+              buttons: {
+                cancel: true,
+                confirm: true,
+              },
+              // timer : 3000
+              // dangerMode: true,
+            }).
+            then((hehe)=>{
+              if (hehe) {
+                $.ajax({
+                  url: url+"api/barang/",
+                  type: 'put',
+                  data: {detail : detail, where : where },
+                  beforeSend: function(res) {
+                                      
+                    $.blockUI({ 
+                      message: "Sedang Diproses", 
+                      css: { 
+                      border: 'none', 
+                      padding: '15px', 
+                      backgroundColor: '#000', 
+                      '-webkit-border-radius': '10px', 
+                      '-moz-border-radius': '10px', 
+                      opacity: .5, 
+                      color: '#fff' 
+                    } });
+                  },
+                  success:  function  (response) {
+                    $.unblockUI();
+                    console.log(response)
+                    $('#sini_tambah_barang')[0].reset();
+                    $('#tb_barang').dataTable().fnDestroy();
+                    datatables()
+                    $('#sini_modalnya').modal('hide');
+                    swal({
+                      title : "Success",
+                      text:  "Penambahan Barang  Berhasil",
+                      icon: "success",
+                      buttons: {
+                        cancel: false,
+                        confirm: false,
+                      },
+                      timer : 3000
+                      // dangerMode: true,
+                    })
+
+                    
+                  },
+                  error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    // console.log(errorThrown)
+                    // console.log(textStatus)
+                    // console.log(XMLHttpRequest)
+                    $.unblockUI();
+                    switch (errorThrown) {
+                      case "Bad Request":
+                        toastnya(`Request Tidak Berhasil`);
+                        break;
+                      case "Internal Server Error":
+                        toastnya(errorThrown)
+                        break;
+                      default:
+                        swal({
+                          text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                          icon: "warning",
+                          buttons: {
+                              cancel: false,
+                              confirm: true,
+                            },
+                          // dangerMode: true,
+                        })
+                        .then((hehe) =>{
+                          location.reload();
+                        });
+                        break;
+                    }
+                  
+                  } 
+                });
+
+            
+              }
+            })
+
+                
+
+
+          }
+          break;
+
+          
+          
+      }
+    }
+
+
+    function penambahan_barang(jumlah,satuan){
+      // console.log(jumlah)
+      
+      if($("#tambah_barang").val() == '' ){
+        $("#jumlah_setelah_penambahan").val()
+      }else{
+        const jumlah_tambah_barang = Number($("#tambah_barang").val()) + Number(jumlah);
+        $("#jumlah_setelah_penambahan").val(jumlah_tambah_barang+' '+satuan)
+      }
+      
+    }
+
+    const numericnya = ['harga'];
+
+    for (let i = 0; i < numericnya.length; i++) {
+      // console.log(numericnya)
+
+      const elem = document.getElementById(numericnya[i]);
+
+      elem.addEventListener("keydown",function(event){
+          var key = event.which;
+          if((key<48 || key>57) && key != 8) event.preventDefault();
+      });
+
+      elem.addEventListener("keyup",function(event){
+          var value = this.value.replace(/,/g,"");
+          this.dataset.currentValue=parseInt(value);
+          var caret = value.length-1;
+          while((caret-3)>-1)
+          {
+              caret -= 3;
+              value = value.split('');
+              value.splice(caret+1,0,",");
+              value = value.join('');
+          }
+          this.value = value;
+      });
+      
+    }
   </script>
 </body>
 </html>

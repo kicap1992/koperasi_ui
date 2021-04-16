@@ -7,30 +7,64 @@ var nama;
 // console.log(nama)
 
 if (level != '' || level != null) {
-  let res = JSON.parse( $.ajax({
-    url: url+'api/admin',
-    type: 'get',
-    data: {where : {nik_admin : nik}},
-    async : false,
-  }).responseText);
+  let res;
+  switch (level) {
+    case 'admin':
+      res = JSON.parse( $.ajax({
+        url: url+'api/admin',
+        type: 'get',
+        data: {where : {nik_admin : nik}},
+        async : false,
+      }).responseText);
 
-  // console.log(level)
-  // console.log(nik)
-  // console.log(res)
+      // console.log(level)
+      // console.log(nik)
+      // console.log(res)
 
-  if(res.res == 'ok'){
-    // case 'ok':
-      // window.location.href = res.url
-      nama = 'Admin';
-      // console.log(nama)
-      // nama = res.nama
-      // break;
-  }else{
-      localStorage.removeItem("level");
-      localStorage.removeItem("nik");
-      window.location.href = '../'
-      // break;
+      if(res.res == 'ok'){
+        // case 'ok':
+          // window.location.href = res.url
+          nama = 'Admin';
+          // console.log(nama)
+          // nama = res.nama
+          // break;
+      }else{
+          localStorage.removeItem("level");
+          localStorage.removeItem("nik");
+          window.location.href = '../'
+          break;
+      }
+      break;
+  
+    case 'user':
+      res = JSON.parse( $.ajax({
+        url: url+'api/user',
+        type: 'get',
+        data: {where : {nik_user : nik}},
+        async : false,
+      }).responseText);
+
+      // console.log(level)
+      // console.log(nik)
+      // console.log(res)
+
+      if(res.res == 'ok'){
+        // case 'ok':
+          // window.location.href = res.url
+          nama = res.data[0].nama;
+          // console.log(nama)
+          // nama = res.nama
+          // break;
+      }else{
+          localStorage.removeItem("level");
+          localStorage.removeItem("nik");
+          window.location.href = '../'
+          break;
+      }
+      break;
   }
+
+  
 }else{
   localStorage.removeItem("level");
   localStorage.removeItem("nik");

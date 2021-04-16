@@ -69,7 +69,7 @@
             <li><a href="simpanan_pokok.html">Simpanan Pokok</a></li>
             <li><a href="simpanan_wajib.html">Simpanan Wajib</a></li>
             <li  class="current"><a href="simpanan_sukarela.html">Simpanan Sukarela</a></li>
-            <li><a href="pinjaman.html">Pinjaman</a></li>
+            <li><a href="pinjaman.html">Pinjaman / Pengembalian</a></li>
           </ul>
           <!-- /.sub-menu js__content -->
         </li>
@@ -317,7 +317,7 @@
             today1 = yyyy+'-'+mm+'-'+dd+' '+h + ":" + m + ":" + s
             // console.log(today1)
             let where = { nik_user : nik_user};
-            simpanan_sukarela = [{tanggal_simpanan : today1+' '+h + ":" + m + ":" + s,simpanan : simpanan_sukarela.replace(/\,/g,'')}];
+            simpanan_sukarela = [{tanggal_simpanan : today1, simpanan : simpanan_sukarela.replace(/\,/g,'')}];
             let detail = {simpanan_sukarela : simpanan_sukarela};
 
             // console.log(where)
@@ -346,6 +346,8 @@
                 $.unblockUI();
                 $('#table_list_guru').dataTable().fnDestroy();
                 datatables()
+                $('#simpanan_sukarela').val(null);
+                $("#input_nik_pembeli").val([0]).trigger('change')
                 // $('#sini_modalnya').modal('hide');
                 console.log(response)
                 swal({
@@ -570,6 +572,7 @@
         }
         this.value = value;
     });
+    
   </script>
 </body>
 </html>

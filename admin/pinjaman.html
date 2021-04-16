@@ -27,6 +27,7 @@
   <!-- <link rel="stylesheet" href="../assets/plugin/datatables/extensions/Responsive/css/responsive.bootstrap.min.css"> -->
   <link rel="stylesheet" href="../assets/fonts/material-design/css/materialdesignicons.css">
   <link rel="stylesheet" href="../assets/sweet-alert/sweetalert.css">
+  <link rel="stylesheet" href="../assets/plugin/select2/css/select2.min.css">
   <style type="text/css">
     .swal-modal .swal-text {
       text-align: center;
@@ -68,7 +69,7 @@
             <li><a href="simpanan_pokok.html">Simpanan Pokok</a></li>
             <li><a href="simpanan_wajib.html">Simpanan Wajib</a></li>
             <li><a href="simpanan_sukarela.html">Simpanan Sukarela</a></li>
-            <li class="current"><a href="pinjaman.html">Pinjaman</a></li>
+            <li class="current"><a href="pinjaman.html">Pinjaman / Pengembalian</a></li>
           </ul>
           <!-- /.sub-menu js__content -->
         </li>
@@ -109,52 +110,66 @@
 </div>
 <!-- /.fixed-navbar -->
 
+<div class="modal fade" id="sini_modalnya" role="dialog">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body row">
+        <p>This is a small modal.</p>
+      </div>
+      <div class="modal-footer">
+        
+      </div>
+    </div>
+  </div>
+</div>
 
 <div id="wrapper">
   <div class="main-content">
     <div class="row small-spacing">
       <div class="col-lg-6 col-xs-12">
         <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF">Form Pinjaman</h4>
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_form_pinjamam')">Form Pinjaman</h4>
           <!-- /.box-title -->
-          <div class="card-content">
+          <div class="card-content"  style="overflow-x: auto; display: none;" id="div_form_pinjamam">
             <form>
               <div class="form-group">
                 <label for="exampleInputEmail1">NIK Guru</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Masukkan NIK Guru">
+                <select name="nik_user" id="nik_user_pinjaman" class="form-control input_nik_pembeli" style="width: 100%" >
+                  <option value='0'>- Cari User -</option>
+                </select>
               </div>
-              <!-- <div class="form-group">
-                <label for="exampleInputPassword1">Nama Guru</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Nama">
-              </div> -->
+        
               <div class="form-group">
                 <label for="exampleInputEmail1">Pinjaman (<i>Rp.</i>)</label>
-                <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Jumlah Pinjaman (Rp.)">
+                <input type="text" class="form-control"  id="pinjaman" maxlength="10" placeholder="Masukkan Jumlah Pinjaman (Rp.)">
               </div>
-              <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Update Pinjaman</button></center>
+              <center><button type="button" onclick="pinjaman_nya()" class="btn btn-primary btn-sm waves-effect waves-light">Update Pinjaman</button></center>
             </form>
           </div>
           <!-- /.card-content -->
         </div>
 
         <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF">Form Pengembalian</h4>
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_form_pengembalian')">Form Pengembalian</h4>
           <!-- /.box-title -->
-          <div class="card-content">
+          <div class="card-content"  style="overflow-x: auto; display: none;" id="div_form_pengembalian">
             <form>
               <div class="form-group">
                 <label for="exampleInputEmail1">NIK Guru</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Masukkan NIK Guru">
+                <select name="nik_user" id="nik_user_pengembalian" class="form-control input_nik_pembeli" style="width: 100%" >
+                  <option value='0'>- Cari User -</option>
+                </select>
               </div>
-              <!-- <div class="form-group">
-                <label for="exampleInputPassword1">Nama Guru</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Nama">
-              </div> -->
+              
               <div class="form-group">
                 <label for="exampleInputEmail1">Pengembalian (<i>Rp.</i>)</label>
-                <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Jumlah Pengembalian (Rp.)">
+                <input type="text" class="form-control" id="pengembalian" maxlength="10" placeholder="Masukkan Jumlah Pengembalian (Rp.)">
               </div>
-              <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Update Pengembalian</button></center>
+              <center><button type="button" onclick="pengembalian_nya()" class="btn btn-primary btn-sm waves-effect waves-light">Update Pengembalian</button></center>
             </form>
           </div>
           <!-- /.card-content -->
@@ -165,37 +180,22 @@
 
       <div class="col-lg-6 col-xs-12">
         <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF">List Pinjaman Guru</h4>
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_list_pinjaman_pengembalian')">List Pinjaman / Pengembalian</h4>
           <!-- /.box-title -->
-          <div class="card-content" style="overflow-x: auto;">
+          <div class="card-content" style="overflow-x: auto; display: none;" id="div_list_pinjaman_pengembalian">
             <table id="table_list_guru" class="table table-striped table-bordered display" style="width:100%">
               <thead>
                 <tr>
                   <th>No</th>
                   <th>NIK</th>
                   <th>Nama</th>
-                  <th>Tanggal Pinjaman Terakhir</th>
+                  <th>Keterangan Pinjaman Terakhir</th>
+                  <th>Keterangan Pengembalian Terakhir</th>
+                  <th>Sisa Pinjaman</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
               
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>1234567890123456</td>
-                  <td>Guru 1</td>
-                  <td>30-08-2001</td>
-                  <td><button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Detail</button></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>1234567890123456</td>
-                  <td>Guru 2</td>
-                  <td>27-05-2009</td>
-                  <td><button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Detail</button></td>
-                </tr>
-                
-              </tbody>
             </table>
             <hr>
             <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Cetak Laporan</button></center>
@@ -203,45 +203,7 @@
           <!-- /.card-content -->
         </div>
 
-        <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF">List Pengembalian Guru</h4>
-          <!-- /.box-title -->
-          <div class="card-content" style="overflow-x: auto;">
-            <table id="table_list_guru1" class="table table-striped table-bordered display" style="width:100%">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>NIK</th>
-                  <th>Nama</th>
-                  <th>Tanggal Pengembalian Terakhir</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>1234567890123456</td>
-                  <td>Guru 1</td>
-                  <td>30-08-2001</td>
-                  <td><button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Detail</button></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>1234567890123456</td>
-                  <td>Guru 2</td>
-                  <td>27-05-2009</td>
-                  <td><button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Detail</button></td>
-                </tr>
-                
-              </tbody>
-            </table>
-            <hr>
-            <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Cetak Laporan</button></center>
-          </div>
-          <!-- /.card-content -->
-        </div>
-        <!-- /.box-content -->
+        
       </div>
 
       
@@ -284,15 +246,556 @@
   <script src="../assets/sweet-alert/toastr/toastr.min.js"></script>
   <link rel="stylesheet" type="text/css" href="../assets/sweet-alert/toastr/toastr.min.css">
   <script src="../assets/sweet-alert/block/jquery.blockUI.js"></script>
+  <script src="../assets/plugin/select2/js/select2.min.js"></script>
+  <script src="../assets/scripts/form.demo.min.js"></script>
   <script type="text/javascript">
     var table;
-    $(document).ready(function() {
- 
-      //datatables
-      table = $('#table_list_guru').DataTable();
-      table = $('#table_list_guru1').DataTable();
+    function datatables() {
+      table = $('#table_list_guru').DataTable({ 
+        // "searching": false,
+        "lengthMenu": [ [5, 10, 15, -1], [5, 10, 15, "All"] ],
+        "pageLength": 15,
+        "ordering": true,
+        "processing": true, 
+        "serverSide": true, 
+        "order": [[ 1, 'desc' ]], 
+         
+        "ajax": {
+          "url": url,
+          "type": "POST",
+          data : {proses : 'table_pinjaman_pengembalian'}
+        },
 
+        "columnDefs": [
+          { 
+            "targets": [ 0 ], 
+            "orderable": false, 
+          },
+        ],
+      });
+    }
+    datatables()  
+
+
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+
+    $(".input_nik_pembeli").select2({
+      ajax: {
+        url: url,
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            searchTerm: params.term,
+            proses : 'cari_usernya' // search term
+          };
+        },
+        processResults: function (response) {
+          // console.log(response)
+          return {
+            results: response
+          };
+        },
+        cache: true
+      }
     });
+
+    async function pinjaman_nya (){
+      const nik_user = $("#nik_user_pinjaman").val()
+      let pinjaman = $("#pinjaman").val()
+
+      if(nik_user == 0){
+        toastnya('NIK User Harus Terisi / Dicari');
+        $("#nik_user_pinjaman").focus()
+      }else if(pinjaman == ''){
+        toastnya('Pinjaman Harus Terisi');
+        $("#pinjaman").focus()
+      }else{
+        // console.log('jalankan')
+        // console.log(nik_user)
+        // console.log(simpanan_wajib)
+        // console.log(tanggal_simpanan_wajib)
+
+        swal({
+          text: `Update Pinjaman User dengan\nNIK : ${nik_user}`,
+          icon: "info",
+          buttons: {
+              cancel: true,
+              confirm: true,
+            },
+          // dangerMode: true,
+        })
+        .then((hehe) =>{
+          
+          if(hehe){
+            
+            // console.log('jalanakan diaktivasi');
+            let h = addZero(today.getHours());
+            let m = addZero(today.getMinutes());
+            let s = addZero(today.getSeconds());
+            today1 = yyyy+'-'+mm+'-'+dd+' '+h + ":" + m + ":" + s
+            // console.log(today1)
+            let where = { nik_user : nik_user};
+            pinjaman = [{tanggal : today1, pinjaman : pinjaman.replace(/\,/g,'')}];
+            let detail = {pinjaman : pinjaman};
+
+            // console.log(where)
+            // console.log(detail)
+
+            $.ajax({
+              url: url+"api/user/",
+              type: 'put',
+              data: {where : where, detail : detail },
+              beforeSend: function(res) {
+                                  
+                $.blockUI({ 
+                  message: "Sedang Diproses", 
+                  css: { 
+                  border: 'none', 
+                  padding: '15px', 
+                  backgroundColor: '#000', 
+                  '-webkit-border-radius': '10px', 
+                  '-moz-border-radius': '10px', 
+                  opacity: .5, 
+                  color: '#fff' 
+                } });
+              },
+              success:  function  (response) {
+                // $('#sini_form')[0].reset();
+                $.unblockUI();
+                $('#table_list_guru').dataTable().fnDestroy();
+                datatables()
+                // $('#sini_modalnya').modal('hide');
+                console.log(response)
+                swal({
+                  title : "Success",
+                  text:  "Pinjaman User Berhasil Diupdate",
+                  icon: "success",
+                  buttons: {
+                    cancel: false,
+                    confirm: false,
+                  },
+                  timer : 3000
+                  // dangerMode: true,
+                })
+
+                $('#pinjaman').val(null);
+                $("#nik_user_pinjaman").val([0]).trigger('change')
+                
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                console.log(errorThrown)
+                $.unblockUI();
+                switch (errorThrown) {
+                  case "Bad Request":
+                    toastnya(`Request Yang Dilakukan Gagal`)
+                    // $("#nik_user").focus()
+                    break;
+                  case "Internal Server Error":
+                    toastnya(errorThrown)
+                    break;
+                  default:
+                    swal({
+                      text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                      icon: "warning",
+                      buttons: {
+                          cancel: false,
+                          confirm: true,
+                        },
+                      // dangerMode: true,
+                    })
+                    .then((hehe) =>{
+                      location.reload();
+                    });
+                    break;
+                }
+              
+              } 
+            });
+
+            
+          }
+        });
+      
+      
+
+      }
+
+    
+    }
+
+    
+    async function pengembalian_nya (){
+      const nik_user = $("#nik_user_pengembalian").val()
+      let pengembalian = $("#pengembalian").val()
+
+      if(nik_user == 0){
+        toastnya('NIK User Harus Terisi / Dicari');
+        $("#nik_user_pengembalian").focus()
+      }else if(pengembalian == ''){
+        toastnya('Pengembalian Harus Terisi');
+        $("#pengembalian").focus()
+      }else{
+        // console.log('jalankan')
+        // console.log(nik_user)
+        // console.log(simpanan_wajib)
+        // console.log(tanggal_simpanan_wajib)
+
+        swal({
+          text: `Update Pengembalian User dengan\nNIK : ${nik_user}`,
+          icon: "info",
+          buttons: {
+              cancel: true,
+              confirm: true,
+            },
+          // dangerMode: true,
+        })
+        .then((hehe) =>{
+          
+          if(hehe){
+            
+            // console.log('jalanakan diaktivasi');
+            let h = addZero(today.getHours());
+            let m = addZero(today.getMinutes());
+            let s = addZero(today.getSeconds());
+            today1 = yyyy+'-'+mm+'-'+dd+' '+h + ":" + m + ":" + s
+            // console.log(today1)
+            let where = { nik_user : nik_user};
+            pengembalian = [{tanggal : today1, pengembalian : pengembalian.replace(/\,/g,'')}];
+            let detail = {pengembalian : pengembalian};
+
+            // console.log(where)
+            // console.log(detail)
+
+            $.ajax({
+              url: url+"api/user/",
+              type: 'put',
+              data: {where : where, detail : detail },
+              beforeSend: function(res) {
+                                  
+                $.blockUI({ 
+                  message: "Sedang Diproses", 
+                  css: { 
+                  border: 'none', 
+                  padding: '15px', 
+                  backgroundColor: '#000', 
+                  '-webkit-border-radius': '10px', 
+                  '-moz-border-radius': '10px', 
+                  opacity: .5, 
+                  color: '#fff' 
+                } });
+              },
+              success:  function  (response) {
+                $.unblockUI();
+                console.log(response)
+               if(response.message == 'tiada pinjaman'){
+                 
+                swal({
+                  text: response.data,
+                  icon: "warning",
+                  buttons: {
+                    cancel: false,
+                    confirm: true,
+                  },
+                  dangerMode: true,
+                  timer : 5000,
+                })
+                // $("#div_list_pinjaman_pengembalian").attr('style','display : none');
+               }
+
+               else if(response.message == 'terlebih pengembalian1'){
+                 
+                  swal({
+                    text: `${response.data}`,
+                    icon: "warning",
+                    buttons: {
+                      cancel: false,
+                      confirm: true,
+                    },
+                    dangerMode: true,
+                    timer : 5000,
+                  })
+                }
+
+                else if(response.message == 'terlebih pengembalian2'){
+                 
+                  swal({
+                    text: `${response.data}`,
+                    icon: "warning",
+                    buttons: {
+                      cancel: false,
+                      confirm: true,
+                    },
+                    dangerMode: true,
+                    timer : 5000,
+                  })
+                  $("#div_list_pinjaman_pengembalian").attr('style','display : block; overflow-x : auto');
+                  $('#pengembalian').val(response.pengembalian)
+                  $('#pengembalian').focus();
+                }
+
+                else if(response.message == 'terlebih pengembalian3'){
+                 
+                  swal({
+                    text: `${response.data}`,
+                    icon: "warning",
+                    buttons: {
+                      cancel: false,
+                      confirm: true,
+                    },
+                    dangerMode: true,
+                    timer : 5000,
+                  })
+                  $("#div_list_pinjaman_pengembalian").attr('style','display : block; overflow-x : auto');
+                  // $('#pengembalian').val(response.pengembalian)
+                  $('#pengembalian').val(null);
+                  $("#nik_user_pengembalian").val([0]).trigger('change')
+                }
+
+                else{
+
+                  $('#table_list_guru').dataTable().fnDestroy();
+                  datatables()
+                  // $('#sini_modalnya').modal('hide');
+                  console.log(response)
+                  swal({
+                    title : "Success",
+                    text:  "Pengembalian User Berhasil Diupdate",
+                    icon: "success",
+                    buttons: {
+                      cancel: false,
+                      confirm: false,
+                    },
+                    timer : 3000
+                    // dangerMode: true,
+                  })
+                  $('#pengembalian').val(null);
+                  $("#nik_user_pengembalian").val([0]).trigger('change')
+
+                }
+                
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                console.log(errorThrown)
+                $.unblockUI();
+                switch (errorThrown) {
+                  case "Bad Request":
+                    toastnya(`Request Yang Dilakukan Gagal`)
+                    // $("#nik_user").focus()
+                    break;
+                  case "Internal Server Error":
+                    toastnya(errorThrown)
+                    break;
+                  default:
+                    swal({
+                      text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                      icon: "warning",
+                      buttons: {
+                          cancel: false,
+                          confirm: true,
+                        },
+                      dangerMode: true,
+                    })
+                    .then((hehe) =>{
+                      location.reload();
+                    });
+                    break;
+                }
+              
+              } 
+            });
+
+            
+          }
+        });
+      
+      
+
+      }
+
+    
+    }
+
+    
+    async function detail_user(nik_user){
+      // console.log(nik_user)
+      let data = await JSON.parse( $.ajax({
+        url: url+"api/user",
+        type: 'get',
+        data: {where : {nik_user : nik_user} },
+        async : false
+      }).responseText).data[0];
+
+      // console.log(data.simpanan_wajib)
+      let pinjaman = JSON.parse(data?.pinjaman) ?? null
+      let pengembalian = JSON.parse(data?.pengembalian) ?? null
+      // console.log(pinjaman)
+ 
+
+      let html =  `<div class="row small-spacing">
+        <div class="col-lg-12 col-xs-12">
+          <div class="box-content card">
+            <h4 class="box-title" style="background: #0055FF">List Pinjaman ${data?.nama}</h4>
+            <!-- /.box-title -->
+            <div class="card-content" style="overflow-x: auto;" id="div_table_pinjaman">
+              <table id="table_pinjaman" class="table table-striped table-bordered display" style="width:100%">
+                
+              </table>
+            </div>
+            <!-- /.card-content -->
+          </div>
+        </div>
+        <div class="col-lg-12 col-xs-12" id="div_pengembalian">
+          <div class="box-content card">
+            <h4 class="box-title" style="background: #0055FF">List Pengembalian ${data?.nama}</h4>
+            <!-- /.box-title -->
+            <div class="card-content" style="overflow-x: auto;" id="div_table_pengembalian">
+              <table id="table_pengembalian" class="table table-striped table-bordered display" style="width:100%">
+                
+              </table>
+            </div>
+            <!-- /.card-content -->
+          </div>
+        </div>
+      </div>`
+
+
+      await $("#sini_modalnya .modal-body").html(html)
+      await $("#sini_modalnya .modal-header .modal-title").html("Detail User")
+      await $("#sini_modalnya .modal-dialog").attr('class','modal-dialog modal-lg')
+
+      if (pinjaman != null ){
+        $('#table_pinjaman').DataTable({
+          responsive: true,
+          "ajax": {
+            "type": "POST",
+            "url": url,
+            "data" :{'proses' : 'table_pinjaman_user', nik_user : data.nik_user},
+            "timeout": 120000,
+            "dataSrc": function (json) {
+              return json
+            }
+          },
+          "sAjaxDataProp": "",
+          "width": "100%",
+          "order": [[ 0, "asc" ]],
+          "aoColumns": [
+            {
+                "mData": null,
+                "title": "No",
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            
+            {
+                "mData": null,
+                "title": "Tanggal",
+                "render": function (data, row, type, meta) {
+                    return data.waktu;
+                }
+            },
+            {
+                "mData": null,
+                "title": "Jumlah",
+                "render": function (data, row, type, meta) {
+                    return data.ket;
+                }
+            },
+          ]
+        });
+
+      }else{
+        $("#div_table_pinjaman").html(`<center><h5>Belum Pernah Melakukan Pinjaman</h5></center>`)
+        if(pengembalian == null){
+          $("#div_pengembalian").attr('style','display : none')
+        }
+      }
+
+      if (pengembalian != null ){
+        $('#table_pengembalian').DataTable({
+          responsive: true,
+          "ajax": {
+            "type": "POST",
+            "url": url,
+            "data" :{'proses' : 'table_pengembalian_user', nik_user : data.nik_user},
+            "timeout": 120000,
+            "dataSrc": function (json) {
+              return json
+            }
+          },
+          "sAjaxDataProp": "",
+          "width": "100%",
+          "order": [[ 0, "asc" ]],
+          "aoColumns": [
+            {
+                "mData": null,
+                "title": "No",
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            
+            {
+                "mData": null,
+                "title": "Tanggal",
+                "render": function (data, row, type, meta) {
+                    return data.waktu;
+                }
+            },
+            {
+                "mData": null,
+                "title": "Jumlah",
+                "render": function (data, row, type, meta) {
+                    return data.ket;
+                }
+            },
+          ]
+        });
+
+      }else{
+        $("#div_table_pengembalian").html(`<center><h5>Belum Pernah Melakukan Pengembalian</h5></center>`)
+      }
+      
+      await $('#sini_modalnya').modal('show');
+    }
+
+
+
+
+
+    const numericnya = ['pinjaman','pengembalian'];
+
+    for (let i = 0; i < numericnya.length; i++) {
+      // console.log(numericnya)
+
+      const elem = document.getElementById(numericnya[i]);
+
+      elem.addEventListener("keydown",function(event){
+          var key = event.which;
+          if((key<48 || key>57) && key != 8) event.preventDefault();
+      });
+
+      elem.addEventListener("keyup",function(event){
+          var value = this.value.replace(/,/g,"");
+          this.dataset.currentValue=parseInt(value);
+          var caret = value.length-1;
+          while((caret-3)>-1)
+          {
+              caret -= 3;
+              value = value.split('');
+              value.splice(caret+1,0,",");
+              value = value.join('');
+          }
+          this.value = value;
+      });
+      
+    }
+      
   </script>
 </body>
 </html>
