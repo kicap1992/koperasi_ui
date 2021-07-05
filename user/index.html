@@ -67,9 +67,9 @@
             <li><a href="pinjaman.html">Pinjaman</a></li>
           </ul>
         </li> -->
-        <li>
+        <!-- <li>
           <a class="waves-effect" href="list_barang.html"><i class="menu-icon zmdi zmdi-storage"></i><span>List Pinjaman Barang</span></a>
-        </li>
+        </li> -->
        
         
       </ul>
@@ -114,7 +114,7 @@
             <h2 class="counter" id="tanggal_registrasi"></h2>
           </div>
         </div>
-        <!-- /.box-content -->
+        
       </div>
       <!-- /.col-lg-3 col-md-6 col-xs-12 -->
       <div class="col-lg-5 col-md-6 col-xs-12">
@@ -125,7 +125,7 @@
             <h2 class="counter" id="jumlah_semua"></h2>
           </div>
         </div>
-        <!-- /.box-content -->
+        
         <div class="col-lg-1 col-md-6 col-xs-12"></div>
       </div>
 
@@ -136,7 +136,6 @@
       <div class="col-lg-8 col-xs-12">
         <div class="box-content card">
           <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_detail_user')">Detail User</h4>
-          <!-- /.box-title -->
           <div class="card-content" style="overflow-x: auto; display: none;"  id="div_detail_user">
             <form>
               <div class="form-group">
@@ -164,7 +163,7 @@
                 <input type="text" id="simpanan_sukarela" class="form-control" disabled>
               </div>
 
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label for="exampleInputEmail1">Pinjaman</label>
                 <input type="text" id="pinjaman" class="form-control" disabled>
               </div>
@@ -172,13 +171,11 @@
               <div class="form-group">
                 <label for="exampleInputEmail1">Pengembalian Pinjaman</label>
                 <input type="text" id="pengembalian" class="form-control" disabled>
-              </div>
+              </div> -->
 
             </form>
           </div>
-          <!-- /.card-content -->
         </div>
-        <!-- /.box-content -->
 
         
       </div>
@@ -186,40 +183,55 @@
 
     </div>
 
+    
+
     <div class="row small-spacing">
       
-      <div class="col-lg-2 col-xs-12"></div>
-      <div class="col-lg-8 col-xs-12">
+
+      <div class="col-lg-6 col-xs-12">
         <div class="box-content card">
-          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_list_simpanan_wajib')">Laporan Simpanan Wajib</h4>
-          <!-- /.box-title -->
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_list_simpanan_wajib')">Log Simpanan Wajib</h4>
+          
           <div class="card-content" style="overflow-x: auto; display: none;"  id="div_list_simpanan_wajib">
             <table id="table_simpanan_wajib" class="table table-striped table-bordered display" style="width:100%">
               
             </table>
           </div>
-          <!-- /.card-content -->
+          
         </div>
-        <!-- /.box-content -->
+        
       </div>
-      <div class="col-lg-2 col-xs-12"></div>
       
-    </div>
-
-    <div class="row small-spacing">
-      <div class="col-lg-2 col-xs-12"></div>
-      <div class="col-lg-8 col-xs-12">
+      <div class="col-lg-6 col-xs-12">
         <div class="box-content card">
           <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_list_simpanan_sukarela')">Laporan Simpanan Sukarela</h4>
-          <!-- /.box-title -->
+          
           <div class="card-content" style="overflow-x: auto; display: none;"  id="div_list_simpanan_sukarela">
             <table id="table_simpanan_sukarela" class="table table-striped table-bordered display" style="width:100%">
               
             </table>
           </div>
-          <!-- /.card-content -->
+          
         </div>
-        <!-- /.box-content -->
+        
+      </div>
+
+    </div>
+
+    <!-- <div class="row small-spacing">
+      <div class="col-lg-2 col-xs-12"></div>
+      <div class="col-lg-8 col-xs-12">
+        <div class="box-content card">
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_list_simpanan_sukarela')">Laporan Simpanan Sukarela</h4>
+          
+          <div class="card-content" style="overflow-x: auto; display: none;"  id="div_list_simpanan_sukarela">
+            <table id="table_simpanan_sukarela" class="table table-striped table-bordered display" style="width:100%">
+              
+            </table>
+          </div>
+          
+        </div>
+        
       </div>
       <div class="col-lg-2 col-xs-12"></div>
     </div>
@@ -229,15 +241,15 @@
       <div class="col-lg-8 col-xs-12">
         <div class="box-content card">
           <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_list_pinjaman')">Laporan Pinjaman</h4>
-          <!-- /.box-title -->
+          
           <div class="card-content" style="overflow-x: auto; display: none;"  id="div_list_pinjaman">
             <table id="table_pinjaman" class="table table-striped table-bordered display" style="width:100%">
               
             </table>
           </div>
-          <!-- /.card-content -->
+          
         </div>
-        <!-- /.box-content -->
+        
       </div>  
       <div class="col-lg-2 col-xs-12"></div>
     </div>
@@ -247,18 +259,18 @@
       <div class="col-lg-8 col-xs-12">
         <div class="box-content card">
           <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_list_pengembalian')">Laporan Pengembalian</h4>
-          <!-- /.box-title -->
+          
           <div class="card-content" style="overflow-x: auto; display: none;"  id="div_list_pengembalian">
             <table id="table_pengembalian" class="table table-striped table-bordered display" style="width:100%">
               
             </table>
           </div>
-          <!-- /.card-content -->
+          
         </div>
-        <!-- /.box-content -->
+        
       </div>  
       <div class="col-lg-2 col-xs-12"></div>
-    </div>
+    </div> -->
 
     <footer class="footer">
       <ul class="list-inline">
@@ -313,8 +325,7 @@
 
     var simpanan_wajib = 0;
     var simpanan_sukarela = 0;
-    var pinjaman = 0;
-    var pengembalian = 0;
+    
     if (detail_user?.simpanan_wajib != null) {
       JSON.parse(detail_user?.simpanan_wajib).forEach(element => {
         simpanan_wajib += Number(element?.simpanan);
@@ -328,30 +339,17 @@
       });
     }
     
-    if (detail_user?.pinjaman != null) {
-      JSON.parse(detail_user?.pinjaman).forEach(element => {
-        pinjaman += Number(element?.pinjaman);
-        // console.log(element?.simpanan)
-      });
-    }
+    // 
 
-    if (detail_user?.pengembalian != null) {
-      JSON.parse(detail_user?.pengembalian).forEach(element => {
-        pengembalian += Number(element?.pengembalian);
-        // console.log(element?.simpanan)
-      });
-    }
-
-    var jumlah_semua = Number(detail_user?.simpanan_pokok) + Number(simpanan_wajib) + Number(simpanan_sukarela) - Number(pinjaman) + Number(pengembalian);
+    var jumlah_semua = Number(detail_user?.simpanan_pokok) + Number(simpanan_wajib) + Number(simpanan_sukarela) 
     console.log(detail_user)
     $("#jumlah_semua").html("Rp. "+ numberWithCommas(jumlah_semua))
     $("#nama").val(detail_user?.nama)
     $("#nik").val(detail_user?.nik_user)
     $("#simpanan_pokok").val("Rp. "+ numberWithCommas(detail_user?.simpanan_pokok))
     $("#simpanan_wajib").val("Rp. "+ numberWithCommas(simpanan_wajib));
-    $("#simpanan_sukarela").val("Rp. "+ numberWithCommas(simpanan_sukarela));
-    $("#pinjaman").val("Rp. "+ numberWithCommas(pinjaman));
-    $("#pengembalian").val("Rp. "+ numberWithCommas(pengembalian));
+    $("#simpanan_sukarela").val((simpanan_sukarela == 0) ? "-" : "Rp. "+ numberWithCommas(simpanan_sukarela));
+    
 
     function datatables_simpanan_wajib_all() {
       $('#table_simpanan_wajib').DataTable({
@@ -384,7 +382,21 @@
           
           {
               "mData": null,
-              "title": "Tanggal",
+              "title": "Tahun",
+              "render": function (data, row, type, meta) {
+                  return data.tahun;
+              }
+          },
+          {
+              "mData": null,
+              "title": "Bulan",
+              "render": function (data, row, type, meta) {
+                  return nama_bulan(data.bulan);
+              }
+          },
+          {
+              "mData": null,
+              "title": "Tanggal Simpan",
               "render": function (data, row, type, meta) {
                   return data.waktu;
               }

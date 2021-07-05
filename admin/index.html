@@ -24,6 +24,8 @@
   <link rel="stylesheet" href="../assets/fonts/material-design/css/materialdesignicons.css">
   <!-- Dark Themes -->
   <!-- <link rel="stylesheet" href="../assets/styles/style-dark.min.css"> -->
+  <link rel="stylesheet" href="../assets/plugin/datatables/media/css/dataTables.bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="../assets/plugin/datatables/extensions/Responsive/css/responsive.bootstrap.min.css"> -->
   <link rel="stylesheet" href="../assets/sweet-alert/sweetalert.css">
   <style type="text/css">
     .swal-modal .swal-text {
@@ -60,7 +62,7 @@
         <li>
           <a class="waves-effect" href="guru.html"><i class="menu-icon fa fa-users"></i><span>Halaman Guru</span></a>
         </li>
-        <li>
+        <!-- <li>
           <a class="waves-effect parent-item js__control" href="#"><i class="menu-icon mdi mdi-cube-outline"></i><span>Halaman Simpanan</span><span class="menu-arrow fa fa-angle-down"></span></a>
           <ul class="sub-menu js__content">
             <li><a href="simpanan_pokok.html">Simpanan Pokok</a></li>
@@ -68,15 +70,14 @@
             <li><a href="simpanan_sukarela.html">Simpanan Sukarela</a></li>
             <li><a href="pinjaman.html">Pinjaman / Penegmbalian</a></li>
           </ul>
-          <!-- /.sub-menu js__content -->
         </li>
         <li>
           <a class="waves-effect" href="list_barang.html"><i class="menu-icon zmdi zmdi-storage"></i><span>List Barang</span></a>
-        </li>
+        </li> -->
         
-        <li>
+        <!-- <li>
           <a class="waves-effect" href="laporan_koperasi.html"><i class="menu-icon zmdi zmdi-assignment"></i><span>Laporan Koperasi</span></a>
-        </li>
+        </li> -->
         
       </ul>
       <!-- /.menu js__accordion -->
@@ -107,6 +108,22 @@
 </div>
 <!-- /.fixed-navbar -->
 
+<div class="modal fade" id="sini_modalnya" role="dialog">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body row">
+        <p>This is a small modal.</p>
+      </div>
+      <div class="modal-footer">
+        
+      </div>
+    </div>
+  </div>
+</div>
 
 <div id="wrapper">
   <div class="main-content">
@@ -116,7 +133,7 @@
           <div class="statistics-box with-icon">
             <i class="ico small  fa fa-users"></i>
             <p class="text text-white">Jumlah Anggota</p>
-            <h2 class="counter">??</h2>
+            <h2 class="counter" id="jumlah_anggota_counter">??</h2>
           </div>
         </div>
         <!-- /.box-content -->
@@ -126,14 +143,62 @@
         <div class="box-content bg-info text-white">
           <div class="statistics-box with-icon">
             <i class="ico small fa fa-dollar"></i>
-            <p class="text text-white">Total Anggaran</p>
-            <h2 class="counter">??</h2>
+            <p class="text text-white">Total Simpanan Koperasi</p>
+            <h2 class="counter" id="total_simpanan_counter">??</h2>
           </div>
         </div>
         <!-- /.box-content -->
       </div>
 
     </div>
+
+    <div class="row small-spacing">
+
+      <div class="col-lg-2 col-xs-12"></div>
+
+      <div class="col-lg-8 col-xs-12">
+        <div class="box-content card">
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_update_wimpanan_wajib')">Pencarian User/Guru</h4>
+          <!-- /.box-title -->
+          <div class="card-content" style="overflow-x: auto;" id="div_update_wimpanan_wajib">
+            <form id="sini_form">
+              <div class="form-group">
+                <label for="exampleInputEmail1">NIK / Nama Guru</label>
+                <!-- <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Masukkan NIK Guru"> -->
+                <select id='input_nik_pembeli' name="nik_user" class="form-control" style="width: 100%" onchange="user_change(value)">
+                  <option value='0'>- Cari User -</option>
+                </select>
+              </div>
+              
+            </form>
+          </div>
+          <!-- /.card-content -->
+        </div>
+        <!-- /.box-content -->
+      </div>
+
+      <div class="col-lg-2 col-xs-12"></div>
+    </div>
+
+    <div class="row small-spacing" id="div_hasil_pencarian" style="display: none;">
+
+      <div class="col-lg-2 col-xs-12"></div>
+
+      <div class="col-lg-8 col-xs-12">
+        <div class="box-content card">
+          <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_untuk_table')">Hasil Pencarian</h4>
+          <!-- /.box-title -->
+          <div class="card-content"  id="div_untuk_table">
+            
+          </div>
+          <!-- /.card-content -->
+        </div>
+        <!-- /.box-content -->
+      </div>
+
+      <div class="col-lg-2 col-xs-12"></div>
+    </div>
+
     <footer class="footer">
       <ul class="list-inline">
         <li>2021 © Dinas Pendidikan Kabupaten Enrekang.</li>
@@ -170,10 +235,648 @@
   <script src="../assets/sweet-alert/sweetalert.js"></script>
   <script src="../assets/sweet-alert/toastr/toastr.min.js"></script>
   <link rel="stylesheet" type="text/css" href="../assets/sweet-alert/toastr/toastr.min.css">
+  <script src="../assets/plugin/select2/js/select2.min.js"></script>
+  <link rel="stylesheet" href="../assets/plugin/select2/css/select2.min.css">
+  <script src="../assets/scripts/form.demo.min.js"></script>
   <script src="../assets/sweet-alert/block/jquery.blockUI.js"></script>
+  <script src="../assets/plugin/datatables/media/js/jquery.dataTables.min.js"></script>
+  <script src="../assets/plugin/datatables/media/js/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">
-    // localStorage.removeItem("level");
-    // localStorage.removeItem("nik");
+    var data_user = null;
+    var data_tagihan_wajib_user = null;
+
+    async function detail_koperasi(){
+      let data = await JSON.parse( $.ajax({
+        url: url+"api/detail_koperasi",
+        type: 'get',
+        // data: {where : {nik_user : nik_user} },
+        async : false
+      }).responseText);
+
+      $("#total_simpanan_counter").html("Rp. "+numberWithCommas(data.total_simpanan))
+      $("#jumlah_anggota_counter").html(data.all_user + " Orang")
+
+      // console.log(data)
+    }
+
+    detail_koperasi();
+
+    $("#input_nik_pembeli").select2({
+      ajax: {
+        url: url,
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            searchTerm: params.term,
+            proses : 'cari_usernya' // search term
+          };
+        },
+        processResults: function (response) {
+          // console.log(response)
+          return {
+            results: response
+          };
+        },
+        cache: true
+      }
+    });
+
+    async function user_change(nik_user){
+      
+      await block_ui();
+      try {
+        await $("#div_hasil_pencarian").removeAttr('style');
+        // await $("#div_hasil_pencarian").slideToggle("slow");
+        let data = await JSON.parse( $.ajax({
+          url: url+"api/user",
+          type: 'get',
+          data: {where : {nik_user : nik_user} },
+          async : false
+        }).responseText).data[0];
+
+        data_user = data;
+
+        
+        let tahun_pendaftaran = data.tanggal_pendaftaran.substring(0,4)
+        let bulan_pendaftaran = (data.tanggal_pendaftaran.substring(5,7)[0] == 0) ? data.tanggal_pendaftaran.substring(5,7)[1]  : data.tanggal_pendaftaran.substring(5,7)
+
+        let dateObj = new Date();
+        let tahun_ini = dateObj.getUTCFullYear();
+        // let tahun_ini = 2022;
+        let bulan_ini = dateObj.getMonth() + 1;
+        // console.log(bulan_pendaftaran)
+        // console.log(bulan_ini)
+
+        let total_simpanan_wajib = await 0;
+        let array_simpanan_wajib = await JSON.parse(data.simpanan_wajib)
+        let ket_tagihan_simpanan_wajib = '';
+        let array_tagihan_simpanan_wajib = [];
+
+      
+
+
+        for (let i = tahun_ini; i >= tahun_pendaftaran; i--){
+          console.log(i)
+          let ii = (i == tahun_ini) ? bulan_ini : 12
+          let end_bulan = (i != tahun_pendaftaran) ? 1 : bulan_pendaftaran
+          for ( ii  ; ii >= end_bulan; ii--) {
+            await array_tagihan_simpanan_wajib.push({'tahun' : i ,'bulan' : ii}) ;
+          }
+        }
+
+        
+        
+
+        for (let i = 0; i < array_simpanan_wajib.length; i++) {
+          total_simpanan_wajib = total_simpanan_wajib + parseInt(array_simpanan_wajib[i].simpanan)
+          for (let ii = 0; ii < array_tagihan_simpanan_wajib.length; ii++) {
+            let genap_bulan = (array_tagihan_simpanan_wajib[ii].bulan.toString().length == 1) ? '0'+array_tagihan_simpanan_wajib[ii].bulan.toString() : array_tagihan_simpanan_wajib[ii].bulan.toString()
+            let tahunnya = array_tagihan_simpanan_wajib[ii].tahun
+           
+            if (genap_bulan == array_simpanan_wajib[i].bulan && tahunnya == array_simpanan_wajib[i].tahun) {
+              // console.log(ii)
+              array_tagihan_simpanan_wajib.splice(ii, 1);
+            }
+          }
+
+
+        }
+
+        for (let i = 0; i < array_tagihan_simpanan_wajib.length; i++) {
+          ket_tagihan_simpanan_wajib = await ket_tagihan_simpanan_wajib + 'Bulan '+array_tagihan_simpanan_wajib[i].bulan+' ,Tahun '+array_tagihan_simpanan_wajib[i].tahun+' | ';
+          
+        }
+
+
+        // await console.log(ket_tagihan_simpanan_wajib);
+        // await console.log(array_tagihan_simpanan_wajib);
+        data_tagihan_wajib_user = await array_tagihan_simpanan_wajib
+
+        let simpanan_sukarela = 0
+        let array_simpanan_sukarela = await JSON.parse(data.simpanan_sukarela)
+
+        if (array_simpanan_sukarela != null) {
+          for (let i = 0; i < array_simpanan_sukarela.length; i++) {
+            // console.log(array_simpanan_sukarela[i]);
+            simpanan_sukarela = simpanan_sukarela + parseInt(array_simpanan_sukarela[i].simpanan);
+            
+          }
+        }
+        
+        let total_all_simpanan = parseInt(data.simpanan_pokok) + parseInt(total_simpanan_wajib) + parseInt(simpanan_sukarela);
+        
+
+        let table = await `
+        <div class="form-group">
+          <label for="exampleInputEmail1">NIK</label>
+          <input type="email" class="form-control"  value="${data.nik_user}" disabled> 
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Nama</label>
+          <input type="email" class="form-control"  value="${data.nama}" disabled> 
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Jumlah Simpanan</label>
+          <input type="email" class="form-control"  value="Rp. ${numberWithCommas(total_all_simpanan)}" disabled> 
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Pembayaran Simpanan Wajib</label>
+          <input type="email" class="form-control"  value="Rp. ${numberWithCommas(data.total_simpanan_wajib)}" disabled> 
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Tanggal Pendaftaran</label>
+          <input type="email" class="form-control"  value="${data.tanggal_pendaftaran}" disabled> 
+        </div>
+        <div class="form-group" style="overflow-x: auto;">
+          <table id="table_user" class="table table-striped table-bordered display" style="width:100%">
+            <thead>
+              <tr >
+                <th style="text-align: center;">Simpanan Pokok</th>
+                <th style="text-align: center;">Simpanan Wajib</th>
+                <th style="text-align: center;">Simpanan Sukarela</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Rp. ${numberWithCommas(data.simpanan_pokok)}</td>
+                <td>Rp. ${numberWithCommas(total_simpanan_wajib)}</td>
+                <td>${(simpanan_sukarela == 0) ? `-` : 'Rp.'+ numberWithCommas(simpanan_sukarela)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Tagihan Simpanan Wajib</label>
+          <textarea class="form-control" style="resize:none" disabled >${(ket_tagihan_simpanan_wajib == '')? 'Tiada Tagihan Simpanan Wajib': ket_tagihan_simpanan_wajib}</textarea>
+        </div>
+        <div class="form-group">
+          <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="detail_user(${nik_user})">Detail</button></center>
+        </div>`
+        
+        await $("#div_untuk_table").html(table);
+        await $('#table_user').DataTable({searching: false, paging: false, info: false,"ordering": false})
+        // await console.log(JSON.stringify(data))
+        await $.unblockUI();
+      } catch (error) {
+        console.log(error)
+        $.unblockUI();
+        swal({
+          text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+          icon: "warning",
+          buttons: {
+              cancel: false,
+              confirm: true,
+            },
+          // dangerMode: true,
+        })
+        .then((hehe) =>{
+          location.reload();
+        });
+      }
+        
+    }
+
+
+    async function detail_user(nik_user){
+      // console.log(nik_user)
+      // console.log(data_user)
+      // console.log(data_tagihan_wajib_user)
+      let html_table_tagihan_simpanan_wajib = `
+        <table id="table_tagihan_simpanan_wajib" class="table table-striped table-bordered display" style="width:100%">
+          <thead>
+            <tr >
+              <th style="text-align: center;">Tahun</th>
+              <th style="text-align: center;">Bulan</th>
+              <th style="text-align: center;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+        `
+      let reverse_array_tagihan_simpanan_wajib = data_tagihan_wajib_user.reverse();
+
+      for (let i = 0; i < reverse_array_tagihan_simpanan_wajib.length; i++) {
+        let datanya = reverse_array_tagihan_simpanan_wajib[i];
+        html_table_tagihan_simpanan_wajib += `
+          <tr>
+            <td>${datanya.tahun}</td>
+            <td>${nama_bulan(datanya.bulan)}</td>
+            <td align="center"><input type='checkbox' name='checkbox_tagihan_simpanan_wajib' value="${datanya.tahun+','+datanya.bulan}" onclick="button_hide_simpanan_wajib()"/></td>
+          </tr>
+        `
+        
+      }
+      
+      
+      html_table_tagihan_simpanan_wajib += `</tbody></table>`
+
+      let html_table_history_simpanan_wajib = `<table id="table_history_simpanan_wajib" class="table table-striped table-bordered display" style="width:100%">
+          <thead>
+            <tr >
+              <th style="text-align: center;">Tahun</th>
+              <th style="text-align: center;">Bulan</th>
+              <th style="text-align: center;">Jumlah</th>
+              <th style="text-align: center;">Tanggal Simpanan</th>
+            </tr>
+          </thead>
+          <tbody>
+        `
+      let data_history_simpanan_wajib = JSON.parse(data_user.simpanan_wajib)
+      let total_simpanan_wajib = 0;
+
+      // console.log(data_history_simpanan_wajib)
+      for (let i = 0; i < data_history_simpanan_wajib.length; i++) {
+        total_simpanan_wajib = total_simpanan_wajib + parseInt(data_history_simpanan_wajib[i].simpanan)
+        html_table_history_simpanan_wajib += `
+          <tr>
+            <td>${data_history_simpanan_wajib[i].tahun}</td>
+            <td>${nama_bulan(data_history_simpanan_wajib[i].bulan)}</td>
+            <td>Rp. ${numberWithCommas(data_history_simpanan_wajib[i].simpanan)}</td>
+            <td>${data_history_simpanan_wajib[i].tanggal_simpan}</td>
+          </tr>
+        `
+        
+      }
+
+      html_table_history_simpanan_wajib += `</tbody></table>`
+
+
+      let html_table_history_simpanan_sukarela = `<table id="table_history_simpanan_sukarela" class="table table-striped table-bordered display" style="width:100%">
+          <thead>
+            <tr >
+              <th style="text-align: center;">Jumlah</th>
+              <th style="text-align: center;">Tanggal Simpanan</th>
+            </tr>
+          </thead>
+          <tbody>
+        `
+      let data_history_simpanan_sukarela = JSON.parse(data_user.simpanan_sukarela)
+      let total_simpanan_sukarela = 0;
+
+      // console.log(data_history_simpanan_sukarela)
+      if (data_history_simpanan_sukarela != null) {
+        for (let i = 0; i < data_history_simpanan_sukarela.length; i++) {
+          total_simpanan_sukarela = total_simpanan_sukarela + parseInt(data_history_simpanan_sukarela[i].simpanan)
+          html_table_history_simpanan_sukarela += `
+            <tr>
+              
+              <td>Rp. ${numberWithCommas(data_history_simpanan_sukarela[i].simpanan)}</td>
+              <td>${data_history_simpanan_sukarela[i].tanggal}</td>
+            </tr>
+          `
+          
+        }
+
+      }
+      
+      html_table_history_simpanan_sukarela += `</tbody></table>`
+
+      let html = `<div class="row small-spacing">
+        <div class="col-lg-2 col-xs-12"></div>
+        <div class="col-lg-8 col-xs-12">
+          <div class="box-content card">
+            <div class="card-content" style="overflow-x: auto;" >
+              <div class="form-group">
+                <label for="exampleInputEmail1">NIK </label>
+                <input type="email" class="form-control" value="${nik_user}">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Nama </label>
+                <input type="email" class="form-control" value="${data_user.nama}">
+              </div>  
+            </div>
+            <!-- /.card-content -->
+          </div>
+          <!-- /.box-content -->
+        </div>
+
+        <div class="col-lg-2 col-xs-12"></div>
+      </div>
+      
+      <div class="row small-spacing">
+        <div class="col-lg-6 col-xs-12">
+          <div class="box-content card">
+            <div class="card-content" style="overflow-x: auto;" >
+              <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_tagihan_simpanan_wajib')">Tagihan Simpanan Wajib</h4>
+              <div class="card-content" style="overflow-x: auto;display:none" id="div_tagihan_simpanan_wajib">
+                ${html_table_tagihan_simpanan_wajib}
+
+                <br>
+                <div class="form-group" id="button_update_simpanan_wajib" style="display:none;">
+                  <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="update_tagihan_simpanan_wajib(${nik_user},'${data_user.nama}')">Update Simpanan Wajib</button></center>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-content card">
+            <div class="card-content" style="overflow-x: auto;" >
+              <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_history_simpanan_wajib')">History Simpanan Wajib</h4>
+              <div class="card-content" style="display:none" id="div_history_simpanan_wajib">
+                <form class="form-horizontal">
+                  <div class="form-group" style="overflow-x: auto;">
+                    ${html_table_history_simpanan_wajib} 
+                  </div>
+                  <hr>
+                  <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-4 control-label">Total Simpanan</label>
+                    <div class="col-sm-6">
+                      <input type="email" class="form-control" value="Rp. ${numberWithCommas(total_simpanan_wajib)}" disabled="">
+                    </div>
+                    <div class="col-sm-2"></div>
+                  </div>
+                </form>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-xs-12">
+          <div class="box-content card">
+            <div class="card-content" style="overflow-x: auto;" >
+              <h4 class="box-title"  style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_simpanan_sukarela')">Simpanan Sukarela</h4>
+              <div class="card-content" style="overflow-x: auto;display:none" id="div_simpanan_sukarela">
+                <form class="form-horizontal">
+                  
+                  <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-4 control-label">Jumlah Simpanan</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="simpanan_sukarela" name="simpanan_sukarela" placeholder="Masukkan Jumlah Simpanan Sukarela" maxlength="9" title="Masukkan Jumlah Simpanan Sukarela">
+                    </div>
+                    <div class="col-sm-2"></div>
+                  </div>
+                </form>
+                <hr>
+                <div class="form-group">
+                  <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="tambah_simpanan_sukarela(${nik_user},'${data_user.nama}')">Tambah Simpanan Sukarela</button></center>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-content card">
+            <div class="card-content" style="overflow-x: auto;" >
+              <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_history_simpanan_sukarela')">History Simpanan Sukarela</h4>
+              <div class="card-content" style="display:none" id="div_history_simpanan_sukarela">
+                <form class="form-horizontal">
+                  <div class="form-group" style="overflow-x: auto;">
+                    ${html_table_history_simpanan_sukarela} 
+                  </div>
+                  <hr>
+                  <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-4 control-label">Total Simpanan</label>
+                    <div class="col-sm-6">
+                      <input type="email" class="form-control" value="${(total_simpanan_sukarela == 0) ? '-' : 'Rp. ' +numberWithCommas(total_simpanan_sukarela)}" disabled="">
+                    </div>
+                    <div class="col-sm-2"></div>
+                  </div>
+                </form>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      `
+      
+      await $("#sini_modalnya .modal-body").html(html)
+      await $('#table_tagihan_simpanan_wajib').DataTable({searching: false, paging: true, info: true,"ordering": false})
+      await $('#table_history_simpanan_wajib').DataTable({searching: true, paging: true, info: true,"ordering": false})
+      await $('#table_history_simpanan_sukarela').DataTable({searching: true, paging: true, info: true,"ordering": false})
+      let elem = document.getElementById("simpanan_sukarela");
+
+      await elem.addEventListener("keydown",function(event){
+          let key = event.which;
+          if((key<48 || key>57) && key != 8) event.preventDefault();
+      });
+
+      await elem.addEventListener("keyup",function(event){
+          let value = this.value.replace(/,/g,"");
+          this.dataset.currentValue=parseInt(value);
+          let caret = value.length-1;
+          while((caret-3)>-1)
+          {
+              caret -= 3;
+              value = value.split("");
+              value.splice(caret+1,0,",");
+              value = value.join("");
+          }
+          this.value = value;
+      });
+      await $("#sini_modalnya .modal-header .modal-title").html("Detail User")
+      await $("#sini_modalnya .modal-dialog").attr('class','modal-dialog modal-lg')
+      await $('#sini_modalnya').modal('show');
+    }
+    // console.log(data_user)
+
+    async function update_tagihan_simpanan_wajib(nik_user,nama_user){
+      let datanya = $.map($('input[name="checkbox_tagihan_simpanan_wajib"]:checked'), function(c){return c.value; })
+
+      let jumlah_bayaran = parseInt(data_user.total_simpanan_wajib) * datanya.length;
+
+      swal({
+        title : "Update Simpanan Wajib ?",
+        text:  `Tagihan Simpanan Wajib Atas Nama ${nama_user} , NIK ${nik_user} akan diupdate\n Total Pembayaran Sebanyak Rp. ${numberWithCommas(jumlah_bayaran)}`,
+        icon: "info",
+        buttons: {
+          cancel: true,
+          confirm: true,
+        },
+        // timer : 1500
+        // dangerMode: true,
+      })
+      .then((hehe) =>{
+        if(hehe){
+          // console.log(data_user)
+
+          $.ajax({
+            url: url+"api/simpanan_wajib/",
+            type: 'put',
+            data: {data : datanya , nik_user : data_user.nik_user.toString(), simpanan_wajib : data_user.total_simpanan_wajib},
+            beforeSend: function(res) {
+                                
+              $.blockUI({ 
+                message: "Sedang Diproses", 
+                css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+              } });
+            },
+            success: function  (response) {
+              $.unblockUI();
+              swal({
+                title : "Success",
+                text:  "Update Simpanan Wajib Berhasil",
+                icon: "success",
+                buttons: {
+                  cancel: false,
+                  confirm: false,
+                },
+                timer : 3000
+                // dangerMode: true,
+              })
+              user_change(data_user.nik_user.toString())
+              detail_koperasi();
+              $('#sini_modalnya').modal('hide');
+              
+              console.log(response)
+
+              
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+              console.log(errorThrown)
+              $.unblockUI();
+              switch (errorThrown) {
+                // case "Bad Request":
+                //   toastnya(`NIK ${nik_user} telah terdaftar dalam sistem sebelumnya`)
+                //   $("#nik_user").focus()
+                //   break;
+                case "Internal Server Error":
+                  toastnya(errorThrown)
+                  break;
+                default:
+                  swal({
+                    text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                    icon: "warning",
+                    buttons: {
+                        cancel: false,
+                        confirm: true,
+                      },
+                    // dangerMode: true,
+                  })
+                  .then((hehe) =>{
+                    location.reload();
+                  });
+                  break;
+              }
+            
+            } 
+          });
+
+
+        }
+      });
+    }
+
+    async function tambah_simpanan_sukarela(nik_user,nama_user){
+      let simpanan_sukarela = $("#simpanan_sukarela").val()
+      if (simpanan_sukarela == '' ||  simpanan_sukarela == null) {
+        // console.log('simpanan sukarela tiada')
+        toastnya("Jumlah Simpanan Sukarela Harus Terisi")
+        $("#simpanan_sukarela").focus()
+      }else{
+        // console.log('jalankan');
+        swal({
+          title : `Tamabah Simpanan Sukarela?`,
+          text: `User ${nama_user} dengan NIK ${nik_user} akan menyimpan sebanyak Rp. ${simpanan_sukarela} `,
+          icon: "info",
+          buttons: {
+            cancel: true,
+            confirm: true,
+          },
+          // dangerMode: true,
+        })
+        .then((hehe) =>{
+          if (hehe) {
+            // console.log('jalankan '+simpanan_sukarela.replace(/,/g, ''))
+
+            $.ajax({
+              url: url+"api/simpanan_sukarela/",
+              type: 'put',
+              data: {nik_user : data_user.nik_user.toString(), simpanan_sukarela : simpanan_sukarela.replace(/,/g, '')},
+              beforeSend: function(res) {
+                                  
+                $.blockUI({ 
+                  message: "Sedang Diproses", 
+                  css: { 
+                  border: 'none', 
+                  padding: '15px', 
+                  backgroundColor: '#000', 
+                  '-webkit-border-radius': '10px', 
+                  '-moz-border-radius': '10px', 
+                  opacity: .5, 
+                  color: '#fff' 
+                } });
+              },
+              success: function  (response) {
+                $.unblockUI();
+                detail_koperasi();
+                swal({
+                  title : "Success",
+                  text:  "Update Simpanan Sukarela Berhasil",
+                  icon: "success",
+                  buttons: {
+                    cancel: false,
+                    confirm: false,
+                  },
+                  timer : 3000
+                  // dangerMode: true,
+                })
+                user_change(data_user.nik_user.toString())
+                $('#sini_modalnya').modal('hide');
+                
+                console.log(response)
+
+                
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                console.log(errorThrown)
+                $.unblockUI();
+                switch (errorThrown) {
+                  // case "Bad Request":
+                  //   toastnya(`NIK ${nik_user} telah terdaftar dalam sistem sebelumnya`)
+                  //   $("#nik_user").focus()
+                  //   break;
+                  case "Internal Server Error":
+                    toastnya(errorThrown)
+                    break;
+                  default:
+                    swal({
+                      text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                      icon: "warning",
+                      buttons: {
+                          cancel: false,
+                          confirm: true,
+                        },
+                      // dangerMode: true,
+                    })
+                    .then((hehe) =>{
+                      location.reload();
+                    });
+                    break;
+                }
+              
+              } 
+            });
+
+
+
+
+          }
+        });
+      }
+    }
+
+    async function button_hide_simpanan_wajib(){
+      let datanya = $.map($('input[name="checkbox_tagihan_simpanan_wajib"]:checked'), function(c){return c.value; })
+      
+      // console.log(datanya.length)
+      if (datanya.length >= 1) {
+        $("#button_update_simpanan_wajib").removeAttr('style')
+      } else {
+        $("#button_update_simpanan_wajib").attr('style','display:none');
+      }
+    }
+
+    // console.log(array_check_simpanan_wajib)
   </script>
 </body>
 </html>

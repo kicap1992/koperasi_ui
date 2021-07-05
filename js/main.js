@@ -153,3 +153,48 @@ function addZero(i) {
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+function block_ui(){
+  $.blockUI({ 
+    message: "Sedang Diproses", 
+    css: { 
+    border: 'none', 
+    padding: '15px', 
+    backgroundColor: '#000', 
+    '-webkit-border-radius': '10px', 
+    '-moz-border-radius': '10px', 
+    opacity: .5, 
+    color: '#fff' 
+  } });
+}
+
+function nama_bulan(val){
+  let nama_bulan;
+  if (val == 1 || val == '01') {
+    nama_bulan = 'Januari'
+  } else if (val == 2 || val == '02') {
+    nama_bulan = 'Februari'
+  } else if (val == 3 || val == '03') {
+    nama_bulan = 'Maret'
+  } else if (val == 4 || val == '04') {
+    nama_bulan = 'April'
+  } else if (val == 5 || val == '05') {
+    nama_bulan = 'Mei'
+  } else if (val == 6 || val == '06') {
+    nama_bulan = 'Juni'
+  } else if (val == 7 || val == '07') {
+    nama_bulan = 'Juli'
+  } else if (val == 8 || val == '08') {
+    nama_bulan = 'Agustus'
+  } else if (val == 9 || val == '09') {
+    nama_bulan = 'September'
+  } else if (val == 10 || val == '10') {
+    nama_bulan = 'Oktober'
+  } else if (val == 11 || val == '11') {
+    nama_bulan = 'November'
+  } else if (val == 12 || val == '12') {
+    nama_bulan = 'Desember'
+  }
+
+  return nama_bulan;
+}
