@@ -81,10 +81,12 @@
          -->
       </ul>
       <!-- /.menu js__accordion -->
-      <h5 class="title">Komponen Lain</h5>
+      <!-- <h5 class="title">Komponen Lain</h5> -->
       <!-- /.title -->
       <ul class="menu js__accordion">
-       
+        <li>
+          <a class="waves-effect" href="laporan.html"><i class="menu-icon fa fa-wpforms"></i><span>Laporan</span></a>
+        </li>
         <li>
           <a class="waves-effect" onclick="logout()"><i class="menu-icon icon icon-logout"></i><span>Logout</span></a>
         </li>
@@ -150,22 +152,24 @@
 
               <div class="form-group">
                 <label for="exampleInputEmail1">Simpanan Pokok</label>
-                <select class="form-control" id="simpanan_pokok" name="simpanan_pokok">
+                <!-- <select class="form-control" id="simpanan_pokok" name="simpanan_pokok">
                   <option disabled="" selected="" value="">-Pilih Simpanan Pokok</option>
                   <option value="5000000">Rp. 5,000,000</option>
                   <option value="7500000">Rp. 7,500,000</option>
                   <option value="10000000">Rp. 10,000,000</option>
-                </select>
+                </select> -->
+                <input type="text" class="form-control" id="simpanan_pokok" name="simpanan_pokok" placeholder="Masukkan Jumlah Simpanan Pokok" maxlength="11">
               </div>
 
               <div class="form-group">
                 <label for="exampleInputEmail1">Simpanan Wajib</label>
-                <select class="form-control" id="simpanan_wajib" name="simpanan_wajib">
+                <!-- <select class="form-control" id="simpanan_wajib" name="simpanan_wajib">
                   <option disabled="" selected="" value="">-Pilih Simpanan Wajib</option>
                   <option value="500000">Rp. 200,000</option>
                   <option value="1000000">Rp. 500,000</option>
                   <option value="1500000">Rp. 1,000,000</option>
-                </select>
+                </select> -->
+                <input type="text" class="form-control" id="simpanan_wajib" name="simpanan_wajib" placeholder="Masukkan Jumlah Simpanan Wajib" maxlength="9">
               </div>
 
 
@@ -296,17 +300,17 @@
       const nik_user = $("#nik_user").val();
       const nama = $("#nama").val();
       const alamat = $("#alamat").val();
-      const simpanan_pokok = $("#simpanan_pokok").val();
-      const simpanan_wajib = $("#simpanan_wajib").val();
+      let simpanan_pokok = $("#simpanan_pokok").val();
+      let simpanan_wajib = $("#simpanan_wajib").val();
       // console.log(nik_user)
       // console.log(nama)
       // console.log(simpanan_pokok)
       if(nik_user == ''){
-        toastnya('NIK User Harus Terisi');
+        toastnya('NIP User Harus Terisi');
         $("#nik_user").focus();
       }
       else if(nik_user.length != 18){
-        toastnya('NIK User Harus Panjang 18 Karakter');
+        toastnya('NIP User Harus Panjang 18 Karakter');
         $("#nik_user").focus();
       }
       else if(nama == ''){
@@ -317,17 +321,30 @@
         toastnya('Alamat Harus Terisi');
         $("#alamat").focus();
       }
-      else if(simpanan_pokok == null){
-        toastnya('Simpanan Pokok Harus Terpilih');
+      // else if(simpanan_pokok == null){
+      else if(simpanan_pokok == ''){
+        // toastnya('Simpanan Pokok Harus Terpilih');
+        toastnya('Simpanan Pokok Harus Terisi');
         $("#simpanan_pokok").focus();
       }
-      else if(simpanan_wajib == null){
-        toastnya('Simpanan Wajib Harus Terpilih');
+      // else if(simpanan_wajib == null){
+      else if(simpanan_wajib == ''){
+        // toastnya('Simpanan Wajib Harus Terpilih');
+        toastnya('Simpanan Wajib Harus Terisi');
         $("#simpanan_wajib").focus();
       }else{
         // console.log('jalankan')
         let data = $("#sini_form").serializeArray();
+        simpanan_pokok=simpanan_pokok.replace(/\,/g,'');
+        simpanan_wajib=simpanan_wajib.replace(/\,/g,'');
+        console.log(simpanan_pokok)
+        console.log(simpanan_wajib)
         data = objectifyForm(data)
+
+        // console.log(data);
+        data.simpanan_pokok = simpanan_pokok
+        data.simpanan_wajib = simpanan_wajib
+        // console.log(data)
         // console.log(objectifyForm(data))
         $.ajax({
           url: url+"api/user/",
@@ -587,8 +604,20 @@
             
           }
         }
-        
-        let total_all_simpanan = parseInt(data.simpanan_pokok) + parseInt(total_simpanan_wajib) + parseInt(simpanan_sukarela);
+
+        let pinjaman = 0
+        let array_pinjaman = await JSON.parse(data.pinjaman)
+
+        if (array_pinjaman != null) {
+          for (let i = 0; i < array_pinjaman.length; i++) {
+            // console.log(array_pinjaman[i]);
+            pinjaman = pinjaman + parseInt(array_pinjaman[i].pinjaman);
+            
+          }
+        }
+        console.log(pinjaman);
+
+        let total_all_simpanan = parseInt(data.simpanan_pokok) + parseInt(total_simpanan_wajib) + parseInt(simpanan_sukarela) - parseInt(pinjaman);
         
 
         let table = await `
@@ -619,6 +648,7 @@
                 <th style="text-align: center;">Simpanan Pokok</th>
                 <th style="text-align: center;">Simpanan Wajib</th>
                 <th style="text-align: center;">Simpanan Sukarela</th>
+                <th style="text-align: center;">Pinjaman</th>
               </tr>
             </thead>
             <tbody>
@@ -626,6 +656,7 @@
                 <td>Rp. ${numberWithCommas(data.simpanan_pokok)}</td>
                 <td>Rp. ${numberWithCommas(total_simpanan_wajib)}</td>
                 <td>${(simpanan_sukarela == 0) ? `-` : 'Rp.'+ numberWithCommas(simpanan_sukarela)}</td>
+                <td>${(pinjaman == 0) ? `-` : 'Rp.'+ numberWithCommas(pinjaman)}</td>
               </tr>
             </tbody>
           </table>
@@ -757,14 +788,44 @@
       
       html_table_history_simpanan_sukarela += `</tbody></table>`
 
+      let html_table_history_pinjaman = `<table id="table_history_pinjaman" class="table table-striped table-bordered display" style="width:100%">
+          <thead>
+            <tr >
+              <th style="text-align: center;">Jumlah</th>
+              <th style="text-align: center;">Tanggal Pinjaman</th>
+            </tr>
+          </thead>
+          <tbody>
+        `
+      let data_history_pinjaman = JSON.parse(data_user.pinjaman)
+      let total_pinjaman = 0;
+
+      // console.log(data_history_pinjaman)
+      if (data_history_pinjaman != null) {
+        for (let i = 0; i < data_history_pinjaman.length; i++) {
+          total_pinjaman = total_pinjaman + parseInt(data_history_pinjaman[i].pinjaman)
+          html_table_history_pinjaman += `
+            <tr>
+              
+              <td>Rp. ${numberWithCommas(data_history_pinjaman[i].pinjaman)}</td>
+              <td>${data_history_pinjaman[i].tanggal_pinjam}</td>
+            </tr>
+          `
+          
+        }
+
+      }
+      
+      html_table_history_pinjaman += `</tbody></table>`
+
       let html = `<div class="row small-spacing">
         <div class="col-lg-2 col-xs-12"></div>
         <div class="col-lg-8 col-xs-12">
           <div class="box-content card">
             <div class="card-content" style="overflow-x: auto;" >
               <div class="form-group">
-                <label for="exampleInputEmail1">NIK </label>
-                <input type="email" class="form-control" value="${nik_user}">
+                <label for="exampleInputEmail1">NIP </label>
+                <input type="email" class="form-control" value="${data_user.nik_user}">
               </div>
               <div class="form-group">
                 <label for="exampleInputEmail1">Nama </label>
@@ -777,6 +838,33 @@
         </div>
 
         <div class="col-lg-2 col-xs-12"></div>
+      </div>
+
+      <div class="row small-spacing">
+        <div class="col-lg-12 col-xs-12">
+          <div class="box-content card">
+            <div class="card-content" style="overflow-x: auto;" >
+              <h4 class="box-title" style="background: #0055FF ;cursor: pointer;" onclick="myFunction('div_pinjaman_user')">Form Pinjaman User</h4>
+              <div class="card-content" style="overflow-x: auto;display:none" id="div_pinjaman_user">
+                <form class="form-horizontal">
+                  <div class="form-group">
+                    <div class="col-sm-2"></div>
+                    <label class="col-sm-2 control-label">Jumlah Pinjaman</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="pinjaman_input" name="pinjaman" placeholder="Masukkan Jumlah Pinjaman" maxlength="9" oninput="pinjaman_ubah(value)">
+                    </div>
+                    <div class="col-sm-2"></div>
+                  </div>
+                  <div class="form-group" id="div_button_pinjam" style="display:none">
+                    <center><button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="update_pinjaman(${nik_user},'${data_user.nama}')">Tambah Pinjaman User</button></center>
+                  </div>
+                  <hr/>
+                  ${html_table_history_pinjaman}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       
       <div class="row small-spacing">
@@ -871,26 +959,37 @@
       await $('#table_tagihan_simpanan_wajib').DataTable({searching: false, paging: true, info: true,"ordering": false})
       await $('#table_history_simpanan_wajib').DataTable({searching: true, paging: true, info: true,"ordering": false})
       await $('#table_history_simpanan_sukarela').DataTable({searching: true, paging: true, info: true,"ordering": false})
-      let elem = document.getElementById("simpanan_sukarela");
+      await $('#table_history_pinjaman').DataTable({searching: true, paging: true, info: true,"ordering": false})
 
-      await elem.addEventListener("keydown",function(event){
-          let key = event.which;
-          if((key<48 || key>57) && key != 8) event.preventDefault();
-      });
+      let array_inputan = ['simpanan_sukarela','pinjaman_input']
 
-      await elem.addEventListener("keyup",function(event){
-          let value = this.value.replace(/,/g,"");
-          this.dataset.currentValue=parseInt(value);
-          let caret = value.length-1;
-          while((caret-3)>-1)
-          {
-              caret -= 3;
-              value = value.split("");
-              value.splice(caret+1,0,",");
-              value = value.join("");
-          }
-          this.value = value;
-      });
+      for (let i = 0; i < array_inputan.length; i++) {
+        let elem = document.getElementById(array_inputan[i]);
+
+        await elem.addEventListener("keydown",function(event){
+            let key = event.which;
+            if((key<48 || key>57) && key != 8) event.preventDefault();
+        });
+
+        await elem.addEventListener("keyup",function(event){
+            let value = this.value.replace(/,/g,"");
+            this.dataset.currentValue=parseInt(value);
+            let caret = value.length-1;
+            while((caret-3)>-1)
+            {
+                caret -= 3;
+                value = value.split("");
+                value.splice(caret+1,0,",");
+                value = value.join("");
+            }
+            this.value = value;
+        });
+
+
+        
+      }
+
+        
       await $("#sini_modalnya .modal-header .modal-title").html("Detail User")
       await $("#sini_modalnya .modal-dialog").attr('class','modal-dialog modal-lg')
       await $('#sini_modalnya').modal('show');
@@ -1099,6 +1198,139 @@
       }
     }
 
+    async function update_pinjaman(nik_user,nama){
+      let pinjaman = $("#pinjaman_input").val().replace(/\,/g,'');
+      // console.log(data_user.nik_user.toString())
+      // console.log('sini update pinjaman '+nik_user)
+
+
+      swal({
+        title : `Tambah Pinjaman User?`,
+        text: `User ${nama} dengan NIP ${data_user.nik_user.toString()} akan meminjam sebanyak Rp. ${numberWithCommas(pinjaman)} `,
+        icon: "info",
+        buttons: {
+          cancel: true,
+          confirm: true,
+        },
+        // dangerMode: true,
+      })
+      .then((hehe) =>{
+        if (hehe) {
+          console.log('jalankan pinjaman')
+
+          $.ajax({
+            url: url+"api/pinjaman/",
+            type: 'put',
+            data: {nik_user : data_user.nik_user.toString(), pinjaman : pinjaman},
+            beforeSend: function(res) {
+                                
+              $.blockUI({ 
+                message: "Sedang Diproses", 
+                css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+              } });
+            },
+            success: function  (response) {
+              $.unblockUI();
+              swal({
+                title : "Success",
+                text:  "Pinjaman User Berhasil",
+                icon: "success",
+                buttons: {
+                  cancel: false,
+                  confirm: false,
+                },
+                timer : 3000
+                // dangerMode: true,
+              })
+              user_change(data_user.nik_user.toString())
+              $('#sini_modalnya').modal('hide');
+              
+              console.log(response)
+
+              
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+              console.log(errorThrown)
+              $.unblockUI();
+              switch (errorThrown) {
+                // case "Bad Request":
+                //   toastnya(`NIK ${nik_user} telah terdaftar dalam sistem sebelumnya`)
+                //   $("#nik_user").focus()
+                //   break;
+                case "Internal Server Error":
+                  toastnya(errorThrown)
+                  break;
+                default:
+                  swal({
+                    text: "Koneksi Gagal, Sila Pastikan Perangkat Terhubung Jaringan Internet",
+                    icon: "warning",
+                    buttons: {
+                        cancel: false,
+                        confirm: true,
+                      },
+                    // dangerMode: true,
+                  })
+                  .then((hehe) =>{
+                    location.reload();
+                  });
+                  break;
+              }
+            
+            } 
+          });
+
+
+
+
+        }
+      });
+  
+    }
+
+    function pinjaman_ubah(val){
+      // console.log(val)
+      if (val == '') {
+        $("#div_button_pinjam").attr('style','display:none');
+      }else{
+        $("#div_button_pinjam").removeAttr('style');
+      }
+    }
+    
+    let array_input_nomor = ['simpanan_pokok','simpanan_wajib']
+  
+    for (let i = 0; i < array_input_nomor.length; i++) {
+      let elem = document.getElementById(array_input_nomor[i]);
+
+      elem.addEventListener("keydown",function(event){
+          let key = event.which;
+          if((key<48 || key>57) && key != 8) event.preventDefault();
+      });
+
+      elem.addEventListener("keyup",function(event){
+          let value = this.value.replace(/,/g,"");
+          this.dataset.currentValue=parseInt(value);
+          let caret = value.length-1;
+          while((caret-3)>-1)
+          {
+              caret -= 3;
+              value = value.split("");
+              value.splice(caret+1,0,",");
+              value = value.join("");
+          }
+          this.value = value;
+      });
+      
+    }
+
+    
+  
     
   </script>
 </body>
